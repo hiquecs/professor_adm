@@ -2,7 +2,6 @@ package com.devgroup.professor_adm.dominio;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -15,9 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 public class Materia implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -29,19 +25,15 @@ public class Materia implements Serializable {
 	private String nome;
 	private Integer quantidadeAlunos;
 	private Float notaTotal;
+	private Boolean liberarNota;
 
-	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-	private Date dataCriacao;
-
-	@ManyToOne
+		@ManyToOne
 	@JoinColumn(name = "curso_id")
 	private Curso curso;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "materia")
 	private List<Atividade> atividade = new ArrayList<>();
 
-	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "materia_aluno", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "aluno_id"))
 	private List<Aluno> alunos = new ArrayList<>();
@@ -49,13 +41,14 @@ public class Materia implements Serializable {
 	public Materia() {
 	}
 
-	public Materia(Integer id, String nome, Integer quantidadeAlunos, Float notaTotal, Date dataCriacao, Curso curso) {
-		super();
+	public Materia(Integer id, String nome, Integer quantidadeAlunos, Float notaTotal, Boolean liberarNota,
+			Curso curso) {
+		
 		this.id = id;
 		this.nome = nome;
 		this.quantidadeAlunos = quantidadeAlunos;
 		this.notaTotal = notaTotal;
-		this.dataCriacao = dataCriacao;
+		this.liberarNota = liberarNota;
 		this.curso = curso;
 	}
 
@@ -82,15 +75,7 @@ public class Materia implements Serializable {
 	public void setQuantidadeAlunos(Integer quantidadeAlunos) {
 		this.quantidadeAlunos = quantidadeAlunos;
 	}
-
-	public Date getDataCriacao() {
-		return dataCriacao;
-	}
-
-	public void setDataCriacao(Date dataCriacao) {
-		this.dataCriacao = dataCriacao;
-	}
-
+	
 	public Curso getCurso() {
 		return curso;
 	}
@@ -122,14 +107,29 @@ public class Materia implements Serializable {
 	public void setAlunos(List<Aluno> alunos) {
 		this.alunos = alunos;
 	}
+	
+	
 
+	public Boolean getLiberarNota() {
+		return liberarNota;
+	}
+
+	public void setLiberarNota(Boolean liberarNota) {
+		this.liberarNota = liberarNota;
+	}
+
+	public List<Atividade> getAtividade() {
+		return atividade;
+	}
+
+	public void setAtividade(List<Atividade> atividade) {
+		this.atividade = atividade;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((alunos == null) ? 0 : alunos.hashCode());
-		result = prime * result + ((curso == null) ? 0 : curso.hashCode());
-		result = prime * result + ((dataCriacao == null) ? 0 : dataCriacao.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		result = prime * result + ((notaTotal == null) ? 0 : notaTotal.hashCode());
@@ -146,21 +146,6 @@ public class Materia implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Materia other = (Materia) obj;
-		if (alunos == null) {
-			if (other.alunos != null)
-				return false;
-		} else if (!alunos.equals(other.alunos))
-			return false;
-		if (curso == null) {
-			if (other.curso != null)
-				return false;
-		} else if (!curso.equals(other.curso))
-			return false;
-		if (dataCriacao == null) {
-			if (other.dataCriacao != null)
-				return false;
-		} else if (!dataCriacao.equals(other.dataCriacao))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -183,5 +168,4 @@ public class Materia implements Serializable {
 			return false;
 		return true;
 	}
-
 }

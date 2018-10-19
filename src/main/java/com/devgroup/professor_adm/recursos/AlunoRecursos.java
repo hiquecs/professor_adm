@@ -1,31 +1,32 @@
 package com.devgroup.professor_adm.recursos;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.devgroup.professor_adm.dominio.Aluno;
+import com.devgroup.professor_adm.servicos.AlunoServicos;
 
-@RestController
+@Controller
 @RequestMapping(value="/alunos")
 public class AlunoRecursos {
 	
-	@RequestMapping (method=RequestMethod.GET)
-	public List<Aluno> listar() {
+	@Autowired
+	private AlunoServicos service;
+	
+
+	@RequestMapping("/{id}")
+	public String preEditar(@PathVariable("id") Integer id, ModelMap model) {
 		
-		Aluno aluno1 = new Aluno(1,"Mario Jose","Mario@hotmail.com","1234","221564",null);
-		Aluno aluno2 = new Aluno(2,"Carlos Henrique","Carlos@hotmail.com","12345","331564",null);
+		//Obtendo o registro do aluno a ser editado
+		Aluno aluno = service.buscarPorID(id);
 		
+		model.addAttribute("aluno", aluno);
 		
-		List <Aluno> lista = new ArrayList<>();
-		
-		lista.add(aluno1);
-		lista.add(aluno2);
-		
-		return lista ;
+		return "/aluno/form";
 	}
+	
 
 }

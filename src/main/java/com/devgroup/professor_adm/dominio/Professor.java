@@ -25,6 +25,7 @@ public class Professor implements Serializable {
 	
 	@Column(unique = true)
 	private String email;
+	
 	@JsonIgnore
 	private String senha;
 	
@@ -36,7 +37,6 @@ public class Professor implements Serializable {
 	}
 
 	public Professor(Integer id, String nome, String email, String senha) {
-		super();
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
@@ -75,8 +75,6 @@ public class Professor implements Serializable {
 		this.senha = senha;
 	}
 	
-
-
 	public List<Curso> getCursos() {
 		return cursos;
 	}
