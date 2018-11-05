@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/estilo2.css">
+        <title>Aluno - Início</title>
+    </head>
+    
+    <body>
+        <div class="container-fluid bg-transparent">
+            <div class="row" id="row1">
+                <div class="btn1">
+                    <button type="button" class="btn btn-info">Administrar Grupos</button>
+                </div>
+                <div class="btn2">
+                    <button type="button" class="btn btn-info">Area de Cadastramento</button>
+                </div>
+                <div class="btn3">
+                    <button type="button" class="btn btn-secondary">Editar Perfil</button>
+                </div>
+            </div>
+            
+            <label><h5>Atividades e Notas de Minhas Disciplinas:</h5></label>
+      	<table class="table table-hover table-bordered">
+				<thead class="thead-light">
+					<tr>
+						<th>PROFESSOR</th>
+						<th>DISCIPLINA</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="a : ${alunos}">
+						<td th:text="${a.curso.professor}"></td>
+						<td th:text="${a.curso.disciplina}"></td>	
+						<td>
+							<a class="btn btn-info btn-sm" role="button" th:href="@{'/aluno/editar/'+ ${a.id} +'/'+${a.nome}}">
+								<span>Pesquisar</span>
+							</a>							
+						</td>
+					</tr>
+				</tbody>
+			</table>		
+        </div>
+    </body>
+</html>

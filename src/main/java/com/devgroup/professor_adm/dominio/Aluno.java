@@ -3,13 +3,14 @@ package com.devgroup.professor_adm.dominio;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.NotBlank;
 
 
 @Entity
@@ -20,15 +21,22 @@ public class Aluno implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	
+	@NotBlank(message="O Nome é um Campo obrigatório.")
+	@Column(nullable=false)
 	private String nome;
 	
-	@Column(unique = true)
+
+	@NotBlank(message="Email e um Campo obrigatorios")
+	@Column(name = "emails",nullable=false,unique = true)
 	private String email;
 	
-	@JsonIgnore
+	@NotBlank(message="A Senha é um Campo obrigatório.")
+	@Column(nullable=false)
 	private String senha;
 	
-	@Column(unique = true)
+	@NotBlank(message="O RGM do aluno é obrigatório.")
+	@Column(nullable=false,unique = true)
 	private String rgm;
 
 	private Integer grupo;
@@ -40,13 +48,11 @@ public class Aluno implements Serializable {
 	}
 
 	public Aluno(Integer id, String nome, String email, String senha, String rgm, Integer grupo) {
-		super();
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
 		this.rgm = rgm;
-		
 		this.grupo = grupo;
 	}
 
@@ -106,7 +112,6 @@ public class Aluno implements Serializable {
 	public void setMaterias(List<Materia> materia) {
 		this.materia = materia;
 	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -161,7 +166,4 @@ public class Aluno implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
-
 }

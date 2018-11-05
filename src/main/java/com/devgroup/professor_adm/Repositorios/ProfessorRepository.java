@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devgroup.professor_adm.dominio.Professor;
 
 @Repository
-public interface ProfessorDAO extends JpaRepository<Professor,Integer> {
+public interface ProfessorRepository extends JpaRepository<Professor,Integer> {
 	
 	@Transactional(readOnly = true)
 	Professor findByEmail(String email);

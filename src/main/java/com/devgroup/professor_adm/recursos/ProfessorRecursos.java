@@ -1,30 +1,29 @@
 package com.devgroup.professor_adm.recursos;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import com.devgroup.professor_adm.Repositorios.ProfessorDao;
+import com.devgroup.professor_adm.Repositorios.ProfessorRepository;
 import com.devgroup.professor_adm.dominio.Professor;
 
-@RestController
-@RequestMapping(value="/professores")
+@Controller
 public class ProfessorRecursos {
 	
-	@RequestMapping (method=RequestMethod.GET)
-	public List<Professor> listar() {
-		
-		Professor prof1 = new Professor(1,"Maria do Bairro","maria@hotmail.com","1010");
-		Professor prof2 = new Professor(1,"Mario Luiz","marioluiz@hotmail.com","1011");
-		
-		List <Professor> lista = new ArrayList<>();
-		
-		lista.add(prof1);
-		lista.add(prof2);
-		
-		return lista ;
-	}
+	@Autowired 
+	private ProfessorRepository dao;
+	@Autowired 
+	private ProfessorDao repo;
 
+	@GetMapping("professor/editar/{id}")
+	public String preEditar(@PathVariable("id") Integer id,ModelMap model) {
+		
+		//Obtendo o registro do professor a ser editado
+		Professor professor = repo.buscarPorId(id);
+		
+		model.addAttribute("professor",professor);
+		return "/professor/editar_professor";
+	}
+	
 }

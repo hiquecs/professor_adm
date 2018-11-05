@@ -1,0 +1,45 @@
+body {
+    background-image: url(Vinho.jpg);
+    background-repeat: repeat-x;
+    background-size: 100%;
+}
+
+.container-fluid {
+    margin-top: 160px;
+}
+
+#row1 {
+    margin-bottom: 150px;
+}
+
+#row2 {
+    padding-bottom: 15px;
+}
+
+.btn1 {
+    margin-left: 350px;
+}
+
+.btn2 {
+    margin-left: 100px;
+}
+
+.btn3 {
+    margin-left: 100px;
+}
+
+label {
+    margin-left: 480px;
+}
+
+.form-control {
+    max-width: 700px;
+    margin-left: 200px;
+	display: block;
+}
+#form1 {
+    max-width: 400px;
+    margin-left: 200px;
+	display: block;
+}
+

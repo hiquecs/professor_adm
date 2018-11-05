@@ -3,15 +3,13 @@ package com.devgroup.professor_adm.dominio;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Curso implements Serializable {
@@ -24,11 +22,9 @@ public class Curso implements Serializable {
 	private String nome;
 	private String senha;
 
-	@ManyToOne
 	@JoinColumn(name = "professor_id")
 	private Professor professor;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "curso")
 	private List<Materia> materias = new ArrayList<>();
 
@@ -36,17 +32,13 @@ public class Curso implements Serializable {
 
 	}
 
-
-
 	public Curso(Integer id, String nome, String senha, Professor professor) {
-		
+
 		this.id = id;
 		this.nome = nome;
 		this.senha = senha;
 		this.professor = professor;
 	}
-
-
 
 	public Integer getId() {
 		return id;
@@ -67,7 +59,7 @@ public class Curso implements Serializable {
 	public Professor getProfessor() {
 		return professor;
 	}
-	
+
 	public String getSenha() {
 		return senha;
 	}
@@ -88,7 +80,6 @@ public class Curso implements Serializable {
 		this.materias = materias;
 	}
 
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -100,7 +91,6 @@ public class Curso implements Serializable {
 		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {

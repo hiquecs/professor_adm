@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.devgroup.professor_adm.dominio.Curso;
 
 @Repository
-public interface CursoDAO extends JpaRepository<Curso, Integer> {
+public interface CursoRepository extends JpaRepository<Curso, Integer> {
 
 }

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+    <head>
+	
+	  <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/estilo.css">
+		
+        <title></title>
+    </head>
+    
+    <body>
+        <div class="container">
+            <form action="" method="" align="center" accept-charset="utf-8" class="" id="form-login">
+                <label class="teste"><h3></h3></label>
+				<br><br>
+				&nbsp;&nbsp;&nbsp;&nbsp; <div class="btn-group mr-2" role="group" aria-label="First group">
+    <a class="btn btn-primary" id="txtPerfil" th:href="@{'/professor/editar/'+ ${professor.id}}" role="button">Editar Perfil</a>
+  </div>
+  <div class="btn-group mr-2" role="group" aria-label="Second group">
+    <a class="btn btn-warning" id="txtAdm" href="#" role="button">Área Administrativas das Disciplinas</a>
+  </div>
+  <div class="btn-group" role="group" aria-label="Third group">
+    <a class="btn btn-dark" id="txtaddCurso" href="#" role="button">Adicionar curso/turma</a>&nbsp;&nbsp;
+	  <!-- <a class="btn btn-primary" id="cadastrar" href="#" role="button">Administrar Grupos</a> -->
+  </div>
+   <div class="btn-group" role="group" aria-label="Third group">
+    <a class="btn btn-success" id="txtAdDisc" href="#" role="button">Adicionar Disciplinas</a>&nbsp;&nbsp;
+	  <!-- <a class="btn btn-primary" id="cadastrar" href="#" role="button">Administrar Grupos</a> -->
+  </div>
+  <div class="btn-group mr-2" role="group" aria-label="Second group">
+    <a class="btn btn-danger" id="txtPesq" href="#" role="button">Pesquisar Alunos por Curso</a>
+  </div>
+  <br/><br/>
+  <div class="btn-group" role="group" aria-label="Third group">
+    <a class="btn btn-info" id="txtAddAtividade" href="#" role="button">Adicionar Atividades</a>   
+      </div>
+     </form>
+  </div><br><br><br><br>
+  <div class="container">
+   <b>Meus Cursos Cadastrados:</b><br>
+   
+   	<table class="table table-hover table-bordered">
+				<thead>
+					<tr class="thead-light">
+						<th>NOME</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="c : ${curso}">
+						<td th:text="${c.nome}"></td>						
+						<td class="text-center">
+							<a class="btn btn-info btn-sm" role="button" th:href="@{'/curso/editar/'+ ${c.id}}">
+								<span>Editar</span>
+							</a>
+							<a class="btn btn-danger btn-sm" role="button" th:href="@{'/curso/excluir/'+ ${c.id}}">
+								<span>Excluir</span>
+							</a>							
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</div>		
+    </body>
+</html>
+
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

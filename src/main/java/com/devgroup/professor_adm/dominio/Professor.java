@@ -10,8 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Professor implements Serializable {
@@ -21,15 +20,18 @@ public class Professor implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@NotBlank(message="O Nome é um Campo obrigatório.")
+	@Column(nullable=false)
 	private String nome;
 	
-	@Column(unique = true)
+	@NotBlank(message="Email e um Campo obrigatorios")
+	@Column(name = "emails",nullable=false,unique = true)
 	private String email;
 	
-	@JsonIgnore
+	@NotBlank(message="A Senha é um Campo obrigatório.")
+	@Column(nullable=false)
 	private String senha;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "professor")
 	private List<Curso> cursos = new ArrayList<>();
 
