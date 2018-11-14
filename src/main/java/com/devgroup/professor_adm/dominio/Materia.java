@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Materia implements Serializable {
@@ -22,16 +25,21 @@ public class Materia implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@NotBlank(message="O nome da disciplina é um Campo obrigatório.")
+	@Column(nullable=false)
 	private String nome;
+	
 	private Integer quantidadeAlunos;
+	
 	private Float notaTotal;
+	
 	private Boolean liberarNota;
 
-		@ManyToOne
+    @ManyToOne
 	@JoinColumn(name = "curso_id")
 	private Curso curso;
 	
-	@OneToMany(mappedBy = "materia")
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "materia")
 	private List<Atividade> atividade = new ArrayList<>();
 
 	@ManyToMany
@@ -39,6 +47,7 @@ public class Materia implements Serializable {
 	private List<Aluno> alunos = new ArrayList<>();
 
 	public Materia() {
+		quantidadeAlunos = 0;
 	}
 
 	public Materia(Integer id, String nome, Integer quantidadeAlunos, Float notaTotal, Boolean liberarNota,
@@ -108,8 +117,6 @@ public class Materia implements Serializable {
 		this.alunos = alunos;
 	}
 	
-	
-
 	public Boolean getLiberarNota() {
 		return liberarNota;
 	}

@@ -8,4 +8,6 @@ import com.devgroup.professor_adm.dominio.Atividade;
 @Repository
 public interface AtividadeRepository extends JpaRepository<Atividade, Integer> {
 
+
+
 }

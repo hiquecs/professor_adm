@@ -1,15 +1,17 @@
 package com.devgroup.professor_adm.dominio;
 
 import java.io.Serializable;
-import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Atividade implements Serializable {
@@ -19,134 +21,115 @@ public class Atividade implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@NotBlank(message = "O nome da atividade é um Campo obrigatório.")
+	@Column(nullable = false)
 	private String nome;
 	private Float nota;
 	private String nomeGrupo;
 	private String anotacoes;
-	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-	private Date dataCriacao;
-	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
-	private Date dataEntrega;
+	private Integer quantidadeAlunosGrupo;
+	
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private String dataCriacao;
+	
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private String dataEntrega;
 
 	@ManyToOne
 	@JoinColumn(name = "materia_id")
 	private Materia materia;
 
 	public Atividade() {
+		
+		quantidadeAlunosGrupo = 0;
 
 	}
 
-
-
-	public Atividade(Integer id, String nome, Float nota, String nomeGrupo, String anotacoes, Date dataCriacao,
-			Date dataEntrega, Materia materia) {
+	public Atividade(Integer id, @NotBlank(message = "O nome da atividade é um Campo obrigatório.") String nome,
+			Float nota, String nomeGrupo, String anotacoes, Integer quantidadeAlunosGrupo, String dataCriacao,
+			String dataEntrega, Materia materia) {
 		this.id = id;
 		this.nome = nome;
 		this.nota = nota;
 		this.nomeGrupo = nomeGrupo;
 		this.anotacoes = anotacoes;
+		this.quantidadeAlunosGrupo = quantidadeAlunosGrupo;
 		this.dataCriacao = dataCriacao;
 		this.dataEntrega = dataEntrega;
 		this.materia = materia;
 	}
 
+	public Integer getQuantidadeAlunosGrupo() {
+		return quantidadeAlunosGrupo;
+	}
 
+	public void setQuantidadeAlunosGrupo(Integer quantidadeAlunosGrupo) {
+		this.quantidadeAlunosGrupo = quantidadeAlunosGrupo;
+	}
 
 	public Integer getId() {
 		return id;
 	}
 
-
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-
 
 	public String getNome() {
 		return nome;
 	}
 
-
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-
 
 	public Float getNota() {
 		return nota;
 	}
 
-
-
 	public void setNota(Float nota) {
 		this.nota = nota;
 	}
-
-
 
 	public String getNomeGrupo() {
 		return nomeGrupo;
 	}
 
-
-
 	public void setNomeGrupo(String nomeGrupo) {
 		this.nomeGrupo = nomeGrupo;
 	}
-
-
 
 	public String getAnotacoes() {
 		return anotacoes;
 	}
 
-
-
 	public void setAnotacoes(String anotacoes) {
 		this.anotacoes = anotacoes;
 	}
 
-
-
-	public Date getDataCriacao() {
+	public String getDataCriacao() {
 		return dataCriacao;
 	}
 
-
-
-	public void setDataCriacao(Date dataCriacao) {
+	public void setDataCriacao(String dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
 
-
-
-	public Date getDataEntrega() {
+	public String getDataEntrega() {
 		return dataEntrega;
 	}
 
-
-
-	public void setDataEntrega(Date dataEntrega) {
+	public void setDataEntrega(String dataEntrega) {
 		this.dataEntrega = dataEntrega;
 	}
-
-
 
 	public Materia getMateria() {
 		return materia;
 	}
 
-
-
 	public void setMateria(Materia materia) {
 		this.materia = materia;
 	}
-
-
 
 	@Override
 	public int hashCode() {

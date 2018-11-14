@@ -1,7 +1,5 @@
 package com.devgroup.professor_adm.recursos;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.devgroup.professor_adm.Repositorios.ProfessorRepository;
-import com.devgroup.professor_adm.dominio.Curso;
 import com.devgroup.professor_adm.dominio.Professor;
 import com.devgroup.professor_adm.servicos.EmailService;
 
@@ -21,9 +17,9 @@ import com.devgroup.professor_adm.servicos.EmailService;
 
 public class LoginProfessorRecursos {
 
-	@Autowired 
+	@Autowired
 	private ProfessorRepository dao;
-	
+
 	@Autowired
 	private EmailService emailService;
 
@@ -31,8 +27,8 @@ public class LoginProfessorRecursos {
 	public String index() {
 		return "/professor/login_professor";
 	}
-	
-	@RequestMapping("/senhaemail/professor")
+
+	@RequestMapping("/professorsenhaemail")
 	public String recuperaSenha() {
 		return "/professor/recupera_senha";
 	}
@@ -57,50 +53,46 @@ public class LoginProfessorRecursos {
 			return "redirect:/cadastrarprofessor";
 		}
 	}
+
 	@RequestMapping("/validacao/professor")
-	public String preEditar(@Valid Professor professor, BindingResult result, RedirectAttributes attr,ModelMap model) {
+	public String preEditar(@Valid Professor professor, BindingResult result, RedirectAttributes attr, ModelMap model) {
 
 		try {
-			
-		Professor pro = dao.findByEmail(professor.getEmail());
-		
-		if (pro.getSenha().equals(professor.getSenha())) {
-			
-			if(pro.getCursos()!=null) {
-				List<Curso>curso = pro.getCursos();
-				model.addAttribute("curso",curso);
+
+			Professor pro = dao.findByEmail(professor.getEmail());
+
+			if (pro.getSenha().equals(professor.getSenha())) {
+
+				model.addAttribute("professor", pro);
+				return "/professor/professor_principal";
 			}
-			model.addAttribute("professor", pro);
-			
-			return "/professor/professor_principal";
-		} 
-		
-		}catch(Exception e) {
-			
+
+		} catch (Exception e) {
+
 			attr.addFlashAttribute("messages", "Email ou Senha incorreto");
-			return  "redirect:/professor";
+			return "redirect:/professor";
 		}
 
-		   attr.addFlashAttribute("messages", "Email ou Senha incorreto");
-			return  "redirect:/professor";
-		}
-	
+		attr.addFlashAttribute("messages", "Email ou Senha incorreto");
+		return "redirect:/professor";
+	}
+
 	@PostMapping("/professor/email/validacao")
 	public String enviaSenhaRecuperada(@Valid Professor professor, BindingResult result, RedirectAttributes attr) {
 
-	    try {
-	    	
-	     	Professor pro = dao.findByEmail(professor.getEmail());
-	     	
+		try {
+
+			Professor pro = dao.findByEmail(professor.getEmail());
+
 			emailService.sendPasswordEmail(pro);
-	     	attr.addFlashAttribute("message", "Sua senha foi enviada ao email digitado com sucesso!");
-	     	
-	     	return "redirect:/senhaemail/professor";
-	    	} catch (Exception e) {
-			
+			attr.addFlashAttribute("message", "Sua senha foi enviada ao email digitado com sucesso!");
+
+			return "redirect:/professorsenhaemail";
+		} catch (Exception e) {
+
 			attr.addFlashAttribute("messages", "Email não encontrado no sistema");
-			
-			return "redirect:/senhaemail/professor";
+
+			return "redirect:/professorsenhaemail";
 		}
 	}
 }

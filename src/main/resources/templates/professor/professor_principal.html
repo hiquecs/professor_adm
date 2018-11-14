@@ -17,49 +17,51 @@
                 <label class="teste"><h3></h3></label>
 				<br><br>
 				&nbsp;&nbsp;&nbsp;&nbsp; <div class="btn-group mr-2" role="group" aria-label="First group">
-    <a class="btn btn-primary" id="txtPerfil" th:href="@{'/professor/editar/'+ ${professor.id}}" role="button">Editar Perfil</a>
+    <a class="btn btn-danger" id="txtPerfil" th:href="@{'/professor/editar/'+ ${professor.id}}" role="button">Editar Perfil</a>
   </div>
   <div class="btn-group mr-2" role="group" aria-label="Second group">
     <a class="btn btn-warning" id="txtAdm" href="#" role="button">Área Administrativas das Disciplinas</a>
   </div>
   <div class="btn-group" role="group" aria-label="Third group">
-    <a class="btn btn-dark" id="txtaddCurso" href="#" role="button">Adicionar curso/turma</a>&nbsp;&nbsp;
+    <a class="btn btn-dark" id="txtaddCurso"th:href="@{'/curso/edicao/'+ ${professor.id}}" role="button">Adicionar curso/turma</a>&nbsp;&nbsp;
 	  <!-- <a class="btn btn-primary" id="cadastrar" href="#" role="button">Administrar Grupos</a> -->
   </div>
    <div class="btn-group" role="group" aria-label="Third group">
-    <a class="btn btn-success" id="txtAdDisc" href="#" role="button">Adicionar Disciplinas</a>&nbsp;&nbsp;
-	  <!-- <a class="btn btn-primary" id="cadastrar" href="#" role="button">Administrar Grupos</a> -->
+    <a class="btn btn-success" id="txtAdDisc" th:href="@{'/prepara/cadastrodisciplina/'+ ${professor.id}}" role="button">Adicionar Disciplinas</a>&nbsp;&nbsp;
+    
   </div>
-  <div class="btn-group mr-2" role="group" aria-label="Second group">
-    <a class="btn btn-danger" id="txtPesq" href="#" role="button">Pesquisar Alunos por Curso</a>
-  </div>
-  <br/><br/>
   <div class="btn-group" role="group" aria-label="Third group">
-    <a class="btn btn-info" id="txtAddAtividade" href="#" role="button">Adicionar Atividades</a>   
+    <a class="btn btn-primary" id="txtAddAtividade" th:href="@{'/escolhecurso/'+ ${professor.id}}"role="button">Adicionar Atividades</a>   
       </div>
-     </form>
-  </div><br><br><br><br>
+     </form><br><br>
+				<a class="navbar-brand " aria-label="Third group">Bem Vindo Professor: </a><br>
+				 <label th:text= ${professor.nome}></label>
+			
+  </div><br>
   <div class="container">
-   <b>Meus Cursos Cadastrados:</b><br>
+   <b>Meus Cursos Cadastrados:</b><br><br>
    
    	<table class="table table-hover table-bordered">
 				<thead>
 					<tr class="thead-light">
 						<th>NOME</th>
+						<th>BUSCAR ALUNOS</th>
 					</tr>
+					
 				</thead>
 				<tbody>
-					<tr th:each="c : ${curso}">
-						<td th:text="${c.nome}"></td>						
+					<tr th:each="c : ${professor.cursos}">
+					
+						<td th:text="${c.nome}"></td>
+											
 						<td class="text-center">
-							<a class="btn btn-info btn-sm" role="button" th:href="@{'/curso/editar/'+ ${c.id}}">
-								<span>Editar</span>
+							<a class="btn btn-dark btn-sm" role="button" th:href="@{'/professor/preparalistaaluno/'+ ${c.id}}">
+								<span>Buscar Alunos Cadastrados</span>
 							</a>
-							<a class="btn btn-danger btn-sm" role="button" th:href="@{'/curso/excluir/'+ ${c.id}}">
-								<span>Excluir</span>
-							</a>							
+													
 						</td>
 					</tr>
+				
 				</tbody>
 			</table>
 			</div>		

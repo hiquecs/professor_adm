@@ -15,7 +15,7 @@
   			<!-- MENSAGEM DE ERRO -->
 			<div th:if="${messages != null}" class="alert alert-danger alert-dismissible" role="alert">				
 				<span th:text="${messages}"></span>
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				
 			</div>	
 			
             <form action= "/validacao/professor"  method="post" accept-charset="utf-8" class="shadow-lg p-3 mb-5 bg-transparent rounded" id="form-login">
@@ -32,7 +32,7 @@
             </form>
                     <a type="button" class="btn btn-primary  btn-block"  href="/cadastrarprofessor" >Cadastre-se</a><br><br>
                     
-                    <a class="btn btn-secondary btn-block" id="txtCancelar" href="/senhaemail/professor" role="button">Esqueci minha senha</a> 
+                    <a class="btn btn-secondary btn-block" id="txtCancelar" href="/professorsenhaemail" role="button">Esqueci minha senha</a> 
                     
         </div>
         </div>

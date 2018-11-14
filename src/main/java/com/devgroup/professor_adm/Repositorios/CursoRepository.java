@@ -8,4 +8,5 @@ import com.devgroup.professor_adm.dominio.Curso;
 @Repository
 public interface CursoRepository extends JpaRepository<Curso, Integer> {
 
+
 }
