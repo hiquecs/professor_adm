@@ -34,6 +34,8 @@ public class Atividade implements Serializable {
 	
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private String dataEntrega;
+	
+	private String url;
 
 	@ManyToOne
 	@JoinColumn(name = "materia_id")
@@ -42,12 +44,12 @@ public class Atividade implements Serializable {
 	public Atividade() {
 		
 		quantidadeAlunosGrupo = 0;
-
+		
 	}
 
 	public Atividade(Integer id, @NotBlank(message = "O nome da atividade é um Campo obrigatório.") String nome,
 			Float nota, String nomeGrupo, String anotacoes, Integer quantidadeAlunosGrupo, String dataCriacao,
-			String dataEntrega, Materia materia) {
+			String dataEntrega,String url, Materia materia) {
 		this.id = id;
 		this.nome = nome;
 		this.nota = nota;
@@ -56,6 +58,7 @@ public class Atividade implements Serializable {
 		this.quantidadeAlunosGrupo = quantidadeAlunosGrupo;
 		this.dataCriacao = dataCriacao;
 		this.dataEntrega = dataEntrega;
+		this.url = url;
 		this.materia = materia;
 	}
 
@@ -129,6 +132,14 @@ public class Atividade implements Serializable {
 
 	public void setMateria(Materia materia) {
 		this.materia = materia;
+	}
+	
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	@Override

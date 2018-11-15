@@ -12,17 +12,11 @@
 	<body>
 		<header style="margin-bottom:20px">
 			<nav class="navbar navbar-expand navbar-dark bg-dark">
-        		<a class="navbar-brand" href="#">SISTEMA ACADÊMICO</a>      		
+        		<a class="navbar-brand" href="#">Formulário de Aluno</a>      		
         	</nav>
 		</header>	
 		<div class="container">
 		
-			<nav class="navbar navbar-light bg-light" style="margin-bottom:20px">
-				<a class="navbar-brand">Formulário de Aluno</a>
-				<a class="btn btn-primary btn-md float-right" th:href="@{/aluno}" role="button">
-					<span>Voltar</span>
-				</a>
-			</nav>
 			
 			<!-- MENSAGEM DE SUCESSO -->
 			<div th:if="${message != null}" class="alert alert-success alert-dismissible" role="alert">				
@@ -33,9 +27,13 @@
 			<div th:if="${messages != null}" class="alert alert-danger alert-dismissible" role="alert">				
 				<span th:text="${messages}"></span>
 				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+			
+			<div>
+			<img src="css/avatar-blank.png" data-holder-rendered="true" style="width: 140px; height: 140px;">
 			</div>	
-	
-			<form  
+
+			<form enctype="multipart/form-data"
 				th:action="${aluno.id == null} ? @{/aluno/cadastro} : @{/aluno/editar}" 
 				th:object="${aluno}"
 				method="post">
@@ -49,6 +47,16 @@
 				</div>			
 				
 				<input type="hidden" th:field="*{id}">
+				
+				<div class="mdl-navigation__link" >
+					<label for="file" >FOTO</label>
+					<input type="file" class="form-control" id="file" name ="file" >
+				</div><br>
+				
+				<div class="form-group">
+					<label for="rgm">RGM:</label>
+					<input type="text" class="form-control" id="rgm" th:field="*{rgm}">
+				</div>
 				
 				<div class="form-group">
 					<label for="nome">NOME:</label>
@@ -65,12 +73,8 @@
 					<input type="text" class="form-control" id="senha" th:field="*{senha}">
 				</div>
 				
-				<div class="form-group">
-					<label for="rgm">RGM:</label>
-					<input type="text" class="form-control" id="rgm" th:field="*{rgm}">
-				</div>
-
 				<button type="submit" class="btn btn-primary">SALVAR</button>
+				<a class="btn btn-danger"  th:href="@{/aluno}">VOLTAR</a>
 			</form>			
 		</div>
 	</body>

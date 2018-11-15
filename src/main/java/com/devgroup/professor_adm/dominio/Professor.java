@@ -3,7 +3,6 @@ package com.devgroup.professor_adm.dominio;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,26 +19,29 @@ public class Professor implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@NotBlank(message="O Nome é um Campo obrigatório.")
-	@Column(nullable=false)
+
+	@NotBlank(message = "O Nome é um Campo obrigatório.")
+	@Column(nullable = false)
 	private String nome;
-	
-	@NotBlank(message="Email e um Campo obrigatorios")
-	@Column(name = "emails",nullable=false,unique = true)
+
+	@NotBlank(message = "Email e um Campo obrigatorios")
+	@Column(name = "emails", nullable = false, unique = true)
 	private String email;
-	
-	@NotBlank(message="A Senha é um Campo obrigatório.")
-	@Column(nullable=false)
+
+	@NotBlank(message = "A Senha é um Campo obrigatório.")
+	@Column(nullable = false)
 	private String senha;
-	
-	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "professor")
+
+	private String url;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "professor")
 	private List<Curso> cursos = new ArrayList<>();
 
 	public Professor() {
+		
+		url = "https://professor-adm.s3.sa-east-1.amazonaws.com/avatar-blank.png";
+		
 	}
-
 	public Professor(Integer id, String nome, String email, String senha) {
 		this.id = id;
 		this.nome = nome;
@@ -78,13 +80,21 @@ public class Professor implements Serializable {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	
+
 	public List<Curso> getCursos() {
 		return cursos;
 	}
 
 	public void setCursos(List<Curso> cursos) {
 		this.cursos = cursos;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	@Override
@@ -129,5 +139,4 @@ public class Professor implements Serializable {
 			return false;
 		return true;
 	}
-
 }

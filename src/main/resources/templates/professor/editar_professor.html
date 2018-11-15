@@ -12,18 +12,11 @@
 	<body>
 		<header style="margin-bottom:20px">
 			<nav class="navbar navbar-expand navbar-dark bg-dark">
-        		<a class="navbar-brand" href="#">SISTEMA ACADÊMICO</a>      		
+        		<a class="navbar-brand" href="#">Formulário de Professor</a>      		
         	</nav>
 		</header>	
 		<div class="container">
 		
-			<nav class="navbar navbar-light bg-light" style="margin-bottom:20px">
-				<a class="navbar-brand">Formulário de Professor</a>
-				<a class="btn btn-primary btn-md float-right" th:href="@{'/professor/principal/'+ ${professor.id}}" role="button">
-					<span>VOLTAR TELA PRINCIPAL</span>
-				</a>
-			</nav>
-			
 			<!-- MENSAGEM DE SUCESSO -->
 			<div th:if="${message != null}" class="alert alert-success alert-dismissible" role="alert">				
 				<span th:text="${message}"></span>
@@ -33,7 +26,29 @@
 			<div th:if="${messages != null}" class="alert alert-danger alert-dismissible" role="alert">				
 				<span th:text="${messages}"></span>
 				<button type="button" class="close" data-dismiss="alert">&times;</button>
-			</div>	
+			</div>
+			<br>
+			    <form enctype="multipart/form-data"
+				th:action="@{/professor/editarfoto}" 
+				th:object="${professor}"
+				method="post">
+				<input type="hidden" th:field="${professor.id}">
+				<input type="hidden" th:field="${professor.nome}">
+				<input type="hidden" th:field="${professor.email}">
+				<input type="hidden" th:field="${professor.senha}">
+                                <div>
+			        <img th:src="${professor.url}" data-holder-rendered="true" style="width: 140px; height: 140px;">
+			        </div>
+			        
+                <div class="mdl-navigation__link" >
+					<label for="file" >FOTO</label>
+					<input type="file" class="form-control" id="file" name ="file" >
+				</div><br>
+
+				<button type="submit" class="btn btn-primary">EDITAR</button>
+			
+			       </form>
+			       <br>		
 	
 			<form  
 				th:action="${professor.id == null} ? @{/professor/cadastro} : @{/professor/salvaredicao}" 
@@ -50,6 +65,7 @@
 				</div>			
 				
 				<input type="hidden" th:field="*{id}">
+				<input type="hidden" th:field="${professor.url}">
 				
 				<div class="form-group">
 					<label for="nome">NOME:</label>
@@ -64,9 +80,10 @@
 				<div class="form-group">
 					<label for="senha">SENHA:</label>
 					<input type="text" class="form-control" id="senha" th:field="*{senha}">
-				</div>
+				</div><br>
 				
 				<button type="submit" class="btn btn-primary">SALVAR</button>
+				<a class="btn btn-danger"  th:href= "@{'/professor/principal/'+ ${professor.id}}">VOLTAR TELA PRINCIPAL</a>
 			</form>			
 		</div>
 	</body>

@@ -1,46 +1,70 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/estilo2.css">
-        <title>Aluno - Início</title>
+
+     <title>Principal</title>
+     
+     <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     </head>
     
     <body>
-        <div class="container-fluid bg-transparent">
-            <div class="row" id="row1">
-                <div class="btn1">
-                    <button type="button" class="btn btn-info">Administrar Grupos</button>
-                </div>
-                <div class="btn2">
-                    <button type="button" class="btn btn-info">Area de Cadastramento</button>
-                </div>
-                <div class="btn3">
-                    <button type="button" class="btn btn-secondary">Editar Perfil</button>
-                </div>
-            </div>
-            
-            <label><h5>Atividades e Notas de Minhas Disciplinas:</h5></label>
-      	<table class="table table-hover table-bordered">
-				<thead class="thead-light">
-					<tr>
-						<th>PROFESSOR</th>
-						<th>DISCIPLINA</th>
+        <div class="container">
+            <form action="" method="" align="center" accept-charset="utf-8" class="" id="form-login">
+                <label class="teste"><h3></h3></label>
+				<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp; <div class="btn-group mr-2" role="group" aria-label="First group">
+    <a class="btn btn-info" id="txtPerfil" th:href="@{'/aluno/editar/'+ ${aluno.id}}" role="button">Editar Perfil</a>
+  </div>
+ 
+  <div class="btn-group" role="group" aria-label="Third group">
+    <a class="btn btn-info" id="txtaddCurso"th:href="@{'/aluno/editar/'+ ${aluno.id}}" role="button">Adicionar curso/turma</a>&nbsp;&nbsp;
+  </div>
+  
+  <div class="btn-group" role="group" aria-label="Third group">
+    <a class="btn btn-info" id="txtAddAtividade" th:href="@{'/aluno/editar/'+ ${aluno.id}}"role="button">Adicionar Atividades</a>   
+      </div>
+     </form><br><br>
+				<a class="navbar-brand " aria-label="Third group">Bem Vindo : </a><br>
+				 <label th:text= ${aluno.nome}></label>
+			
+  </div><br>
+  <div class="container">
+   <b>Meus Cursos Cadastrados:</b><br><br>
+   
+   	<table class="table table-hover table-bordered">
+				<thead>
+					<tr class="thead-light">
+						<th>NOME</th>
+						<th>BUSCAR ALUNOS</th>
 					</tr>
+					
 				</thead>
 				<tbody>
-					<tr th:each="a : ${alunos}">
-						<td th:text="${a.curso.professor}"></td>
-						<td th:text="${a.curso.disciplina}"></td>	
-						<td>
-							<a class="btn btn-info btn-sm" role="button" th:href="@{'/aluno/editar/'+ ${a.id} +'/'+${a.nome}}">
-								<span>Pesquisar</span>
-							</a>							
+					<tr th:each="c : ${aluno}">
+					
+						<td th:text="${c.nome}"></td>
+											
+						<td class="text-center">
+							<a class="btn btn-dark btn-sm" role="button" th:href="@{'/aluno/editar/'+ ${aluno.id}}">
+								<span>Buscar Alunos Cadastrados</span>
+							</a>
+													
 						</td>
 					</tr>
+				
 				</tbody>
-			</table>		
-        </div>
+			</table>
+			</div>		
     </body>
 </html>
+
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

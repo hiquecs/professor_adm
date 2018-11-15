@@ -8,10 +8,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.devgroup.professor_adm.Repositorios.AlunoRepository;
 import com.devgroup.professor_adm.dominio.Aluno;
 import com.devgroup.professor_adm.servicos.EmailService;
+import com.devgroup.professor_adm.servicos.S3Service;
 
 @Controller
 
@@ -22,6 +25,9 @@ public class LoginAlunoRecursos {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private S3Service salva;
 
 
 	@RequestMapping("/aluno")
@@ -40,12 +46,16 @@ public class LoginAlunoRecursos {
 	}
 
 	@RequestMapping("/aluno/cadastro")
-	public String salvarAluno(@Valid Aluno aluno, BindingResult result, RedirectAttributes attr) {
+	public String salvarAluno(@RequestParam("file") MultipartFile file,@Valid Aluno aluno, BindingResult result, RedirectAttributes attr) {
 
 		try {
 			if (result.hasErrors()) {
 				return "/aluno/cadastrar_aluno";
 			}
+			if(!file.isEmpty()) {
+				  String a = ""+salva.uploadFile(file);
+				  aluno.setUrl(a);
+				}
 			dao.save(aluno);
 			attr.addFlashAttribute("message", "Aluno cadastrado com sucesso!");
 			return "redirect:/cadastraraluno";

@@ -1,5 +1,7 @@
 package com.devgroup.professor_adm.recursos;
 
+import java.awt.image.BufferedImage;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +10,15 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.devgroup.professor_adm.Repositorios.ProfessorRepository;
 import com.devgroup.professor_adm.dominio.Professor;
 import com.devgroup.professor_adm.servicos.EmailService;
+import com.devgroup.professor_adm.servicos.ImageService;
+import com.devgroup.professor_adm.servicos.S3Service;
 
 @Controller
 
@@ -19,10 +26,17 @@ public class LoginProfessorRecursos {
 
 	@Autowired
 	private ProfessorRepository dao;
-
+	
 	@Autowired
 	private EmailService emailService;
-
+	
+	
+	@Autowired
+	private S3Service salva;
+	
+	@Autowired
+	private ImageService imagem;
+	
 	@RequestMapping("/professor")
 	public String index() {
 		return "/professor/login_professor";
@@ -39,11 +53,18 @@ public class LoginProfessorRecursos {
 	}
 
 	@RequestMapping("/professor/cadastro")
-	public String salvarProfessor(@Valid Professor professor, BindingResult result, RedirectAttributes attr) {
+	public String salvarProfessor( @RequestParam("file") MultipartFile file, @Valid Professor professor,
+			BindingResult result, RedirectAttributes attr) {
 
 		try {
 			if (result.hasErrors()) {
 				return "/professor/cadastrar_professor";
+			}
+			if(!file.isEmpty()) {
+			
+			  String a = ""+salva.uploadFile(file);
+			  professor.setUrl(a);
+			  
 			}
 			dao.save(professor);
 			attr.addFlashAttribute("message", "Professor cadastrado com sucesso!");

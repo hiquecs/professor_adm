@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Professor</title>
+		<title>Aluno</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
@@ -12,7 +12,7 @@
 	<body>
 		<header style="margin-bottom:20px">
 			<nav class="navbar navbar-expand navbar-dark bg-dark">
-        		<a class="navbar-brand" href="#">Formulário de Professor</a>      		
+        		<a class="navbar-brand" href="#">Formulário de Aluno</a>      		
         	</nav>
 		</header>	
 		<div class="container">
@@ -26,13 +26,33 @@
 			<div th:if="${messages != null}" class="alert alert-danger alert-dismissible" role="alert">				
 				<span th:text="${messages}"></span>
 				<button type="button" class="close" data-dismiss="alert">&times;</button>
-			</div>	
-			<div>
-			<img src="css/avatar-blank.png" data-holder-rendered="true" style="width: 140px; height: 140px;">
 			</div>
-			<form enctype="multipart/form-data"
-				th:action="${professor.id == null} ? @{/professor/cadastro} : @{/professor/editar}" 
-				th:object="${professor}"
+			    <form enctype="multipart/form-data"
+				th:action="@{/aluno/editarfoto}" 
+				th:object="${aluno}"
+				method="post">
+				<input type="hidden" th:field="${aluno.id}">
+				<input type="hidden" th:field="${aluno.rgm}">
+				<input type="hidden" th:field="${aluno.nome}">
+				<input type="hidden" th:field="${aluno.email}">
+				<input type="hidden" th:field="${aluno.senha}">
+                                <div>
+			        <img th:src="${aluno.url}" data-holder-rendered="true" style="width: 140px; height: 140px;">
+			        </div>
+			        
+                <div class="mdl-navigation__link" >
+					<label for="file" >FOTO</label>
+					<input type="file" class="form-control" id="file" name ="file" >
+				</div>
+
+				<button type="submit" class="btn btn-primary">EDITAR</button>
+			
+			       </form>
+			      <br>		
+	
+			<form  
+				th:action="${aluno.id == null} ? @{/aluno/cadastro} : @{/aluno/salvaredicao}" 
+				th:object="${aluno}"
 				method="post">
 				
 				<!-- MENSAGENS DE VALIDAÇÕES -->
@@ -40,15 +60,17 @@
 					<div th:each="error : ${#fields.detailedErrors()}">
 						<span th:text="${error.message}"></span>
 					</div>
+					
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 				</div>			
 				
 				<input type="hidden" th:field="*{id}">
+				<input type="hidden" th:field="${aluno.url}">
 				
-				<div class="mdl-navigation__link" >
-					<label for="file" >FOTO</label>
-					<input type="file" class="form-control" id="file" name ="file" >
-				</div><br>
+				<div class="form-group">
+					<label for="rgm">RGM:</label>
+					<input type="text" class="form-control" id="rgm" th:field="*{rgm}">
+				</div>
 				
 				<div class="form-group">
 					<label for="nome">NOME:</label>
@@ -66,7 +88,7 @@
 				</div>
 				
 				<button type="submit" class="btn btn-primary">SALVAR</button>
-				<a class="btn btn-danger"  th:href="@{/professor}">VOLTAR</a>
+				<a class="btn btn-danger"  th:href= "@{'/aluno/principal/'+ ${aluno.id}}">VOLTAR TELA PRINCIPAL</a>
 			</form>			
 		</div>
 	</body>

@@ -20,11 +20,27 @@
         	</nav>
 		</header>	
 		<div class="container">
-		<br>
-		<nav class="navbar navbar-light bg-light" style="margin-bottom:20px">
-				<a class="navbar-brand">Formulário de Atividade</a>
-			</nav>
-		
+			    <form enctype="multipart/form-data"
+				th:action="@{/atividade/editararquivo}" 
+				th:object="${atividade}"
+				method="post">
+				<input type="hidden" th:field="${atividade.id}">
+				<input type="hidden" th:field="${atividade.nome}">
+				<input type="hidden" th:field="${atividade.anotacoes}">
+				<input type="hidden" th:field="${atividade.quantidadeAlunosGrupo}">
+				<input type="hidden" th:field="${atividade.dataCriacao}">
+				<input type="hidden" th:field="${atividade.dataEntrega}">
+                    
+				<a class="nav-link" th:href="@{${atividade.url}}"  target="_blank">Ver Anexo salvo ...</a>
+				
+                <div class="mdl-navigation__link" >
+					<label for="file" >Arquivo</label>
+					<input type="file" class="form-control" id="file" name ="file" >
+					<button type="submit" class="btn btn-primary">EDITAR</button>
+				</div><br>
+				
+			    </form>
+			     
 			<!-- MENSAGEM DE SUCESSO -->
 			<div th:if="${message != null}" class="alert alert-success alert-dismissible" role="alert">				
 				<span th:text="${message}"></span>

@@ -41,10 +41,14 @@ public class Aluno implements Serializable {
 
 	private Integer grupo;
 	
+	private String url;
+	
 	@ManyToMany(mappedBy = "alunos")
 	private List<Materia> materia = new ArrayList<>();
 	
 	public Aluno() {
+		
+		url = "https://professor-adm.s3.sa-east-1.amazonaws.com/avatar-blank.png";
 	}
 
 	public Aluno(Integer id, String nome, String email, String senha, String rgm, Integer grupo) {
@@ -111,6 +115,14 @@ public class Aluno implements Serializable {
 
 	public void setMaterias(List<Materia> materia) {
 		this.materia = materia;
+	}
+	
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	@Override
 	public int hashCode() {
