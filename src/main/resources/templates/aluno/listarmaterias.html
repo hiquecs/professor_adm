@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+    <head>
+	    <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+        
+        <title>Disciplinas</title>
+    </head>
+    <body>	
+  	<header style="margin-bottom:20px">
+			<nav class="navbar navbar-light navbar-dark bg-dark">
+        		<a class="navbar-brand" href="#">Lista de Disciplinas</a>
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="btn btn-primary btn-md float-right" th:href="@{'/aluno/principal/'+ ${aluno.id}}">VOLTAR TELA PRINCIPAL</a>
+				</ul>        		
+        	</nav>
+		</header>	
+		
+  <div class="container">
+  
+	  	    	<!-- MENSAGEM DE SUCESSO -->
+				<div th:if="${message != null}" class="alert alert-success alert-dismissible" role="alert">				
+					<span th:text="${message}"></span>
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+				</div>
+				
+		        <!-- MENSAGEM DE ERRO -->
+				<div th:if="${messages != null}"
+					class="alert alert-danger alert-dismissible" role="alert">
+					<span th:text="${messages}"></span>
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+				</div>
+			
+  
+  <a class="navbar-brand " aria-label="Third group">Aluno:  </a>
+				 <label th:text= ${aluno.nome}></label><br>
+				 <br>
+   <b>Disciplinas Cadastradas:</b><br><br>
+   
+   	<table class="table table-hover table-bordered">
+				<thead>
+					<tr class="thead-light">
+					    <th>PROFESSOR</th>
+						<th>DISCIPLINAS</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+				
+					<tr th:each="c : ${materia}">
+					    <td th:text="${professor.nome}"></td>
+						<td th:text="${c.nome}"></td>
+						
+						<td class="text-center">
+							<a class="btn btn-success btn-sm" role="button" th:href="@{/disciplinaparticipar/{iddisc}/{idalu}(iddisc=${c.id}, idalu=${aluno.id})}">
+								<span>Participar da Disciplina</span>
+							</a>						
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</div>		
+    </body>
+</html>

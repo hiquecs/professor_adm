@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -25,40 +26,56 @@ public class Materia implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@NotBlank(message="O nome da disciplina é um Campo obrigatório.")
-	@Column(nullable=false)
+	@NotBlank(message = "O nome da disciplina é um Campo obrigatório.")
+	@Column(nullable = false)
 	private String nome;
-	
+
 	private Integer quantidadeAlunos;
-	
+
 	private Float notaTotal;
-	
+
 	private Boolean liberarNota;
 
-    @ManyToOne
+	@ManyToOne
 	@JoinColumn(name = "curso_id")
 	private Curso curso;
-	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "materia")
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
 	private List<Atividade> atividade = new ArrayList<>();
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
+	private List<AtividadeAluno> atividadeAluno = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "materia")
+	private List<AlunoProfessor> alunoprofessor = new ArrayList<>();
+
 	@ManyToMany
-	@JoinTable(name = "materia_aluno", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "aluno_id"))
+	@JoinTable(name = "materia_aluno", joinColumns = { @JoinColumn(name = "materia_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "aluno_id") }, uniqueConstraints = {
+					@UniqueConstraint(columnNames = { "materia_id", "aluno_id" }) })
 	private List<Aluno> alunos = new ArrayList<>();
 
 	public Materia() {
 		quantidadeAlunos = 0;
 	}
 
-	public Materia(Integer id, String nome, Integer quantidadeAlunos, Float notaTotal, Boolean liberarNota,
-			Curso curso) {
-		
+	public Materia(Integer id, @NotBlank(message = "O nome da disciplina é um Campo obrigatório.") String nome,
+			Integer quantidadeAlunos, Float notaTotal, Boolean liberarNota, Curso curso) {
+
 		this.id = id;
 		this.nome = nome;
 		this.quantidadeAlunos = quantidadeAlunos;
 		this.notaTotal = notaTotal;
 		this.liberarNota = liberarNota;
 		this.curso = curso;
+	}
+
+	public List<AlunoProfessor> getAlunoprofessor() {
+		return alunoprofessor;
+	}
+
+	public void setAlunoprofessor(List<AlunoProfessor> alunoprofessor) {
+		this.alunoprofessor = alunoprofessor;
 	}
 
 	public Integer getId() {
@@ -84,22 +101,6 @@ public class Materia implements Serializable {
 	public void setQuantidadeAlunos(Integer quantidadeAlunos) {
 		this.quantidadeAlunos = quantidadeAlunos;
 	}
-	
-	public Curso getCurso() {
-		return curso;
-	}
-
-	public void setCurso(Curso curso) {
-		this.curso = curso;
-	}
-
-	public List<Aluno> getCategorias() {
-		return alunos;
-	}
-
-	public void setCategorias(List<Aluno> categorias) {
-		this.alunos = categorias;
-	}
 
 	public Float getNotaTotal() {
 		return notaTotal;
@@ -109,20 +110,20 @@ public class Materia implements Serializable {
 		this.notaTotal = notaTotal;
 	}
 
-	public List<Aluno> getAlunos() {
-		return alunos;
-	}
-
-	public void setAlunos(List<Aluno> alunos) {
-		this.alunos = alunos;
-	}
-	
 	public Boolean getLiberarNota() {
 		return liberarNota;
 	}
 
 	public void setLiberarNota(Boolean liberarNota) {
 		this.liberarNota = liberarNota;
+	}
+
+	public Curso getCurso() {
+		return curso;
+	}
+
+	public void setCurso(Curso curso) {
+		this.curso = curso;
 	}
 
 	public List<Atividade> getAtividade() {
@@ -132,12 +133,34 @@ public class Materia implements Serializable {
 	public void setAtividade(List<Atividade> atividade) {
 		this.atividade = atividade;
 	}
-	
+
+	public List<AtividadeAluno> getAtividadeAluno() {
+		return atividadeAluno;
+	}
+
+	public void setAtividadeAluno(List<AtividadeAluno> atividadeAluno) {
+		this.atividadeAluno = atividadeAluno;
+	}
+
+	public List<Aluno> getAlunos() {
+		return alunos;
+	}
+
+	public void setAlunos(List<Aluno> alunos) {
+		this.alunos = alunos;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((alunoprofessor == null) ? 0 : alunoprofessor.hashCode());
+		result = prime * result + ((alunos == null) ? 0 : alunos.hashCode());
+		result = prime * result + ((atividade == null) ? 0 : atividade.hashCode());
+		result = prime * result + ((atividadeAluno == null) ? 0 : atividadeAluno.hashCode());
+		result = prime * result + ((curso == null) ? 0 : curso.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((liberarNota == null) ? 0 : liberarNota.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		result = prime * result + ((notaTotal == null) ? 0 : notaTotal.hashCode());
 		result = prime * result + ((quantidadeAlunos == null) ? 0 : quantidadeAlunos.hashCode());
@@ -153,10 +176,40 @@ public class Materia implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Materia other = (Materia) obj;
+		if (alunoprofessor == null) {
+			if (other.alunoprofessor != null)
+				return false;
+		} else if (!alunoprofessor.equals(other.alunoprofessor))
+			return false;
+		if (alunos == null) {
+			if (other.alunos != null)
+				return false;
+		} else if (!alunos.equals(other.alunos))
+			return false;
+		if (atividade == null) {
+			if (other.atividade != null)
+				return false;
+		} else if (!atividade.equals(other.atividade))
+			return false;
+		if (atividadeAluno == null) {
+			if (other.atividadeAluno != null)
+				return false;
+		} else if (!atividadeAluno.equals(other.atividadeAluno))
+			return false;
+		if (curso == null) {
+			if (other.curso != null)
+				return false;
+		} else if (!curso.equals(other.curso))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (liberarNota == null) {
+			if (other.liberarNota != null)
+				return false;
+		} else if (!liberarNota.equals(other.liberarNota))
 			return false;
 		if (nome == null) {
 			if (other.nome != null)

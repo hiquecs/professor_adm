@@ -20,7 +20,7 @@
     <a class="btn btn-danger" id="txtPerfil" th:href="@{'/professor/editar/'+ ${professor.id}}" role="button">Editar Perfil</a>
   </div>
   <div class="btn-group mr-2" role="group" aria-label="Second group">
-    <a class="btn btn-warning" id="txtAdm" href="#" role="button">Área Administrativas das Disciplinas</a>
+    <a class="btn btn-warning" id="txtAdm"  th:href="@{'/areaadministrativa/'+ ${professor.id}}" role="button">Área Administrativas das Disciplinas</a>
   </div>
   <div class="btn-group" role="group" aria-label="Third group">
     <a class="btn btn-dark" id="txtaddCurso"th:href="@{'/curso/edicao/'+ ${professor.id}}" role="button">Adicionar curso/turma</a>&nbsp;&nbsp;

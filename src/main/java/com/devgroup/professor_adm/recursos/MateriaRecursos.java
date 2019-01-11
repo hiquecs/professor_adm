@@ -51,27 +51,27 @@ public class MateriaRecursos {
 
 		return "/professor/materiacadastro";
 	}
-	
+
 	@GetMapping("/materia/excluir/{id}")
 	public String excluiMateria(@PathVariable("id") Integer id, RedirectAttributes attr) {
 
-           Materia materia = materiaRepo.getOne(id);
-			materiaRepo.deleteById(id);
-			
+		Materia materia = materiaRepo.getOne(id);
+		materiaRepo.deleteById(id);
+
 		return "redirect:/listarmaterias/" + materia.getCurso().getId();
 	}
-	
+
 	@GetMapping("/editar/materia_ediçao/{id}")
 	public String salvarEditaçãoCurso(@PathVariable("id") Integer id, Materia materia, BindingResult result,
 			RedirectAttributes attr, ModelMap model) {
 
 		Materia mat = materiaRepo.getOne(id);
-		
+
 		Professor professor = repo.getOne(mat.getCurso().getProfessor().getId());
-		
-		model.addAttribute("materia",mat);
-		model.addAttribute("professor",professor);
-		
+
+		model.addAttribute("materia", mat);
+		model.addAttribute("professor", professor);
+
 		return "/professor/materiaedicao";
 	}
 
@@ -79,12 +79,12 @@ public class MateriaRecursos {
 	public String listarMaterias(@PathVariable("id") Integer id, ModelMap model) {
 
 		Curso curso = repoCurso.getOne(id);
-		
+
 		Professor professor = repo.getOne(curso.getProfessor().getId());
 
 		model.addAttribute("curso", curso);
 		model.addAttribute("professor", professor);
-		
+
 		return "/professor/listarmaterias";
 	}
 
@@ -103,7 +103,7 @@ public class MateriaRecursos {
 			throws DataIntegrityViolationException {
 
 		Curso curso = repoCurso.getOne(materia.getId());
-		
+
 		try {
 
 			if (result.hasErrors()) {
@@ -112,6 +112,7 @@ public class MateriaRecursos {
 			}
 
 			Materia mat = new Materia(null, materia.getNome(), materia.getQuantidadeAlunos(), 0.0f, false, curso);
+
 			materiaRepo.save(mat);
 			attr.addFlashAttribute("message", "Disciplina cadastrada com sucesso!");
 
@@ -122,17 +123,17 @@ public class MateriaRecursos {
 			return "redirect:/cadastra/cadastrodisciplina/" + curso.getId();
 		}
 	}
-	
+
 	@RequestMapping("/materia/salvaedicao")
-	public String materiaSalvarEdicao(@Valid Materia materia, BindingResult result, RedirectAttributes attr, ModelMap model)
-			throws DataIntegrityViolationException {
+	public String materiaSalvarEdicao(@Valid Materia materia, BindingResult result, RedirectAttributes attr,
+			ModelMap model) throws DataIntegrityViolationException {
 
 		Materia mat = materiaRepo.getOne(materia.getId());
 		mat.setNome(materia.getNome());
 		mat.setQuantidadeAlunos(materia.getQuantidadeAlunos());
-		
+
 		Curso curso = repoCurso.getOne(mat.getCurso().getId());
-		
+
 		try {
 
 			if (result.hasErrors()) {
@@ -146,15 +147,10 @@ public class MateriaRecursos {
 			return "redirect:/cadastra/cadastrodisciplina/" + curso.getId();
 		} catch (DataIntegrityViolationException e) {
 			attr.addFlashAttribute("messages", "O nome da Disciplina já existe para este Curso");
-			
+
 			model.addAttribute("materia", materia);
 			return "/professor/materiaedicao";
 		}
 	}
-	
-	
-	
-	
-	
 
 }

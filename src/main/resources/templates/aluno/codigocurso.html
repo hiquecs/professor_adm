@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Acessar curso</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<header style="margin-bottom:20px">
+			<nav class="navbar navbar-light navbar-dark bg-dark">
+        		<a class="navbar-brand" href="#">Acessar Curso</a>  		
+        	</nav>
+		</header>	
+		<div class="container" >
+		<br><br><br><br>	
+			
+			<!-- MENSAGEM DE ERRO -->
+			<div th:if="${messages != null}" class="alert alert-danger alert-dismissible" role="alert">				
+				<span th:text="${messages}"></span>
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>			
+			<h5>
+			<form 
+				th:action= "@{/aluno/validasenhacurso}" 
+				th:object="${aluno}"
+				method="post">
+
+				<!-- MENSAGENS DE VALIDAÇÕES -->
+				<div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger alert-dismissible" role="alert">				
+					<div th:each="error : ${#fields.detailedErrors()}">
+						<span th:text="${error.message}"></span>
+					</div>
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+				</div>	
+						
+				<input type="hidden" name="id" th:field="${aluno.id}">
+				
+				<input type="hidden" name="rgm" th:field="${aluno.rgm}">
+				
+				<input type="hidden" name="name" th:field="${aluno.nome}">
+				
+				<input type="hidden" name="email" th:field="${aluno.email}">
+				
+					<label  for="nome">Digite o codigo de acesso:</label>
+						
+			    <div class="form-group">
+					<label for="senha">SENHA:</label>
+					<input type="password" class="form-control" id="senha" name="senha">
+				</div>
+				
+				<button type="submit" class="btn btn-primary">Enviar</button>
+				<a class="btn btn-primary btn-md float-right" th:href="@{'/aluno/principal/'+ ${aluno.id}}">VOLTAR TELA PRINCIPAL</a>
+			</form>	
+			</div>	
+		  </h5>
+	</body>
+</html>

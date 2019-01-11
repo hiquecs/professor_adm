@@ -8,47 +8,45 @@
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/estilo.css">
         
-        <title>Disciplina Seleção</title>
+        <title>Professores</title>
     </head>
     <body>	
   	<header style="margin-bottom:20px">
 			<nav class="navbar navbar-light navbar-dark bg-dark">
-        		<a class="navbar-brand" href="#">Lista de Disciplinas</a>
+        		<a class="navbar-brand" href="#">Lista de Professores</a>
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="btn btn-primary btn-md float-right" th:href="@{'/professor/principal/'+ ${curso.professor.id}}">VOLTAR TELA PRINCIPAL</a>
+						<a class="btn btn-primary btn-md float-right" th:href="@{'/aluno/principal/'+ ${aluno.id}}">VOLTAR TELA PRINCIPAL</a>
 				</ul>        		
         	</nav>
 		</header>	
   <div class="container">
-  <a class="navbar-brand " aria-label="Third group">Professor:  </a>
-				 <label th:text= ${curso.professor.nome}></label><br>
-				 
-  <a class="navbar-brand " aria-label="Third group">Curso:  </a>
-  <label th:text= ${curso.nome}></label><br>
+  <a class="navbar-brand " aria-label="Third group">Aluno:  </a>
+				 <label th:text= ${aluno.nome}></label><br>
 				 
 				 <br>
-   <b>Minhas Disciplinas Cadastradas:</b><br><br>
+   <b>Professores Cadastrados:</b><br><br>
    
    	<table class="table table-hover table-bordered">
 				<thead>
 					<tr class="thead-light">
-						<th>NOME</th>
+						<th>FOTO</th>
+						<th>NOME PROFESSOR</th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="c : ${curso.materias}">
+					<tr th:each="c : ${professores}">
 					
+					<td><a class="nav-link" th:href="@{${c.url}}"  target="_blank">Foto ...</a></td>
 						<td th:text="${c.nome}"></td>
+						
 						<td class="text-center">
-							<a class="btn btn-success btn-sm" role="button" th:href="@{'/trazeralunomateria/'+ ${c.id}}">
-								<span>Trazer Todos Alunos</span>
-							</a>
-													
+							<a class="btn btn-success btn-sm" role="button" th:href="@{/cursosprofessor/{idpro}/{idalu}(idpro=${c.id}, idalu=${aluno.id})}">
+								<span>Pesquisar Cursos</span>
+							</a>						
 						</td>
 					</tr>
-				
 				</tbody>
 			</table>
 			</div>		

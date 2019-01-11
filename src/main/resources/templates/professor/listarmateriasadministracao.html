@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/estilo.css">
         
-        <title>Disciplina Seleção</title>
+        <title>Listar Disciplinas</title>
     </head>
     <body>	
   	<header style="margin-bottom:20px">
@@ -16,13 +16,13 @@
         		<a class="navbar-brand" href="#">Lista de Disciplinas</a>
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="btn btn-primary btn-md float-right" th:href="@{'/professor/principal/'+ ${curso.professor.id}}">VOLTAR TELA PRINCIPAL</a>
+						<a class="btn btn-primary btn-md float-right" th:href="@{'/professor/principal/'+ ${professor.id}}">VOLTAR TELA PRINCIPAL</a>
 				</ul>        		
         	</nav>
 		</header>	
   <div class="container">
   <a class="navbar-brand " aria-label="Third group">Professor:  </a>
-				 <label th:text= ${curso.professor.nome}></label><br>
+				 <label th:text= ${professor.nome}></label><br>
 				 
   <a class="navbar-brand " aria-label="Third group">Curso:  </a>
   <label th:text= ${curso.nome}></label><br>
@@ -34,6 +34,7 @@
 				<thead>
 					<tr class="thead-light">
 						<th>NOME</th>
+						<th>QUANTIDADE DE ALUNOS</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -41,9 +42,11 @@
 					<tr th:each="c : ${curso.materias}">
 					
 						<td th:text="${c.nome}"></td>
+						<td th:text="${c.quantidadeAlunos}"></td>
+						
 						<td class="text-center">
-							<a class="btn btn-success btn-sm" role="button" th:href="@{'/trazeralunomateria/'+ ${c.id}}">
-								<span>Trazer Todos Alunos</span>
+							<a class="btn btn-success btn-sm" role="button" th:href="@{'/areaadministrativanotas/'+ ${c.id}}">
+								<span>Pesquisar</span>
 							</a>
 													
 						</td>

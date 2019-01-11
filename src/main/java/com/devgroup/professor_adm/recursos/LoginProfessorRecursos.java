@@ -1,9 +1,9 @@
 package com.devgroup.professor_adm.recursos;
 
+
+
 import java.awt.image.BufferedImage;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.devgroup.professor_adm.Repositorios.ProfessorRepository;
 import com.devgroup.professor_adm.dominio.Professor;
 import com.devgroup.professor_adm.servicos.EmailService;
@@ -35,7 +34,8 @@ public class LoginProfessorRecursos {
 	private S3Service salva;
 	
 	@Autowired
-	private ImageService imagem;
+	private ImageService imageService;
+	
 	
 	@RequestMapping("/professor")
 	public String index() {
@@ -61,8 +61,12 @@ public class LoginProfessorRecursos {
 				return "/professor/cadastrar_professor";
 			}
 			if(!file.isEmpty()) {
-			
-			  String a = ""+salva.uploadFile(file);
+				
+			 BufferedImage jpgImage = imageService.getJpgImageFromFile(file);
+			 jpgImage = imageService.cropSquare(jpgImage);
+			 jpgImage = imageService.resize(jpgImage,200);
+			  String fileName = professor.getEmail() + ".jpg";
+			  String a = ""+salva.uploadFile(imageService.getInputStream(jpgImage, "jpg"),fileName,"image");
 			  professor.setUrl(a);
 			  
 			}

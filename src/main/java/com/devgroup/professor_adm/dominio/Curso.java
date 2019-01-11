@@ -24,7 +24,7 @@ public class Curso implements Serializable {
 	private Integer id;
 
 	@NotBlank(message="O nome do curso é um Campo obrigatório.")
-	@Column(nullable=false,unique = true)
+	@Column(nullable=false)
 	private String nome;
 	
 	@NotBlank(message="O senha do curso é um Campo obrigatório.")
@@ -41,9 +41,10 @@ public class Curso implements Serializable {
 	public Curso() {
 
 	}
-
-	public Curso(Integer id, String nome, String senha, Professor professor) {
-
+	
+	public Curso(Integer id, @NotBlank(message = "O nome do curso é um Campo obrigatório.") String nome,
+			@NotBlank(message = "O senha do curso é um Campo obrigatório.") String senha, Professor professor) {
+		super();
 		this.id = id;
 		this.nome = nome;
 		this.senha = senha;
@@ -137,10 +138,5 @@ public class Curso implements Serializable {
 		} else if (!senha.equals(other.senha))
 			return false;
 		return true;
-	}
-	@Override
-	public String toString() {
-		return nome ;
-	}
-
+	}	
 }

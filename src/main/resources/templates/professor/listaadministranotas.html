@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+    <head>
+	
+	  <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/estilo.css">
+		
+        <title></title>
+    </head>
+    
+    <body>
+        <div class="container">
+            <form action="" method="" align="center" accept-charset="utf-8" class="" id="form-login">
+                <label class="teste"><h3></h3></label>
+				<br>
+				
+	<div class="btn-group mr-2" role="group" aria-label="Second group">
+    <a class="btn btn-info" id="txtAdm"  th:href="@{'/cadastraalunoprofessor/'+ ${materia.id}}" role="button">Cadastrar Alunos</a>
+  </div>
+  <div class="btn-group mr-2" role="group" aria-label="Second group">
+    <a class="btn btn-info" id="txtAdm"  th:href="@{'/listarasatividadesgrupo/'+ ${materia.id}}" role="button">Listar Por Grupos</a>
+  </div>
+   <div class="btn-group" role="group" aria-label="Third group">
+    <a class="btn btn-info" id="txtAdDisc" th:href="@{'/professor/principal/'+ ${professor.id}}" role="button">Voltar a Tela Inicial</a>&nbsp;&nbsp;
+    </div>
+     </form>
+				<br><a class="navbar-brand " aria-label="Third group">Professor: </a>
+				 <label th:text= ${professor.nome}></label><br>
+				 <a class="navbar-brand " aria-label="Third group">Curso: </a>
+				 <label th:text= ${materia.curso.nome}></label>	<br> 
+				 <a class="navbar-brand " aria-label="Third group">Disciplina: </a>
+				 <label th:text= ${materia.nome}></label><br>
+				 
+				  <a class="navbar-brand " aria-label="Third group">Quantidade de Alunos da Disciplina = </a>
+				 <label th:text= ${materia.quantidadeAlunos}></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				 
+				  <a class="navbar-brand " aria-label="Third group">Alunos Cadastrados = </a>
+				 <label th:text= ${quantidade}></label>
+                   </div><br>
+  <div class="container">
+ 
+      <table class="table table-bordered table-hover table-striped">
+         <thead>
+            <tr>
+                <th>RGM</th>
+                <th>NOME ALUNO</th>
+                <th>ATIVIDADE</th>
+                <th>NOTA</th>
+                <th>ANOTAÇÃO</th>
+                <th>SITUAÇÃO</th>  
+                 <th> 
+                            <div id="switch">
+                                 <label class="switch">
+                                  <input type="checkbox" th:checked="${materia.liberarNota}">
+                                   <a class="btn btn-warning" id="txtAdDisc" th:href="@{'/liberanota/'+ ${materia.id}}" role="button">Liberar Nota</a>
+                                  <span class="slider round sucess"></span>
+                               </label>
+                            </div>
+                        </th>  
+            </tr>
+         </thead>
+         	<tbody>
+					<tr th:each="c : ${atividade}">
+					
+						<td th:text="${c.aluno.rgm}"></td>
+						<td th:text="${c.aluno.nome}"></td>
+						<td th:text="${c.nome}"></td>
+						<td th:text="${c.nota}"></td>
+						<td th:text="${c.anotacao}"></td>
+						<td><input type="checkbox" name="active" th:checked="${c.situacao}"/></td>
+						<td class="text-center">
+							<a class="btn btn-success btn-sm" role="button" th:href="@{'/editar/notasMateria/'+ ${c.id}}">
+								<span>Editar</span>
+							</a>
+													
+						</td>
+					</tr>
+				</tbody>
+               </table>
+			</div>	
+			<br>
+    </body>
+</html>
+
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

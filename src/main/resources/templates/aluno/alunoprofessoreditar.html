@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Aluno</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<header style="margin-bottom:20px">
+			<nav class="navbar navbar-expand navbar-dark bg-dark">
+        		<a class="navbar-brand" href="#">Formulário de Aluno</a>      		
+        	</nav>
+		</header>	
+		<div class="container">
+		
+			<form 
+				th:action="@{/salvaalunoprofessoredicao/}" 
+				th:object="${aluno}"
+				method="post">
+				
+				<input type="hidden" th:field="*{id}">
+	
+				<br><div class="form-group">
+					<label for="rgm">RGM:</label>
+					<input type="text" class="form-control" id="rgm" th:field="*{rgm}">
+				</div>
+				
+				<div class="form-group">
+					<label for="nome">NOME:</label>
+					<input type="text" class="form-control" id="nome" th:field="*{nome}">
+				</div>
+				
+				<button type="submit" class="btn btn-primary">SALVAR</button>
+				<a class="btn btn-danger"  th:href="@{'/areaadministrativanotas/'+ ${materia.id}}">VOLTAR</a>
+			</form><br><br><br>
+			
+			 	<table class="table table-hover table-bordered">
+				<thead>
+					<tr class="thead-light">
+					    
+					    <th>RGM</th>
+						<th>NOME</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="c : ${alunoprofessor}">
+					
+					    <td th:text="${c.rgm}"></td>
+					      <td th:text="${c.nome}"></td>
+					    		
+						<td class="text-center">
+							<a class="btn btn-primary btn-sm" role="button"  th:href="@{'/editaalunoprofessor/'+ ${c.id}}">
+								<span>EDITAR</span>
+							</a>	
+								<a class="btn btn-danger btn-sm" role="button" th:href="@{'/excluiralunoprofessor/'+ ${c.id}}">
+								<span>EXCLUIR</span>
+							</a>
+													
+						</td>
+					</tr>
+				
+				</tbody>
+			</table>		
+		</div>
+	</body>
+</html>

@@ -15,14 +15,13 @@
   			<!-- MENSAGEM DE ERRO -->
 			<div th:if="${messages != null}" class="alert alert-danger alert-dismissible" role="alert">				
 				<span th:text="${messages}"></span>
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
 			</div>	
 			
             <form action= "/validacao"  method="post" accept-charset="utf-8" class="shadow-lg p-3 mb-5 bg-transparent rounded" id="form-login">
                 <label class="teste"><h3>Login Aluno</h3></label>
                 <div class="form-group">
                     
-                    <label for="login">Login:</label><br>
+                    <label for="login">Email:</label><br>
                     <input type="text" class="form-control" maxlength="50" id="login" name="email">
                     <label for="senha">Senha:</label><br>
                     <input type="password" class="form-control" maxlength="50" id="senha" name="senha">

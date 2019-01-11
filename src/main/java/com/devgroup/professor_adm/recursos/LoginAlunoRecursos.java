@@ -1,5 +1,8 @@
 package com.devgroup.professor_adm.recursos;
 
+import java.awt.image.BufferedImage;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.devgroup.professor_adm.Repositorios.AlunoRepository;
 import com.devgroup.professor_adm.dominio.Aluno;
+import com.devgroup.professor_adm.dominio.Materia;
 import com.devgroup.professor_adm.servicos.EmailService;
+import com.devgroup.professor_adm.servicos.ImageService;
 import com.devgroup.professor_adm.servicos.S3Service;
 
 @Controller
@@ -25,6 +31,9 @@ public class LoginAlunoRecursos {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private ImageService imageService;
 	
 	@Autowired
 	private S3Service salva;
@@ -53,7 +62,13 @@ public class LoginAlunoRecursos {
 				return "/aluno/cadastrar_aluno";
 			}
 			if(!file.isEmpty()) {
-				  String a = ""+salva.uploadFile(file);
+				
+				
+				BufferedImage jpgImage = imageService.getJpgImageFromFile(file);
+				jpgImage = imageService.cropSquare(jpgImage);
+				jpgImage = imageService.resize(jpgImage, 200);
+				String fileName = aluno.getRgm() + ".jpg";
+				String a = "" + salva.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
 				  aluno.setUrl(a);
 				}
 			dao.save(aluno);
@@ -72,6 +87,10 @@ public class LoginAlunoRecursos {
 		Aluno aluno1 = dao.findByEmail(aluno.getEmail());
 		
 		if (aluno1.getSenha().equals(aluno.getSenha())) {
+			
+			List<Materia> materia =aluno1.getMateria();
+			
+			model.addAttribute("materia",materia);
 			model.addAttribute("aluno", aluno1);
 			
 			return "/aluno/aluno_principal";

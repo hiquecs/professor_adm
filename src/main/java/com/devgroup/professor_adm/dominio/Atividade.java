@@ -1,7 +1,11 @@
 package com.devgroup.professor_adm.dominio;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,36 +29,36 @@ public class Atividade implements Serializable {
 	@NotBlank(message = "O nome da atividade é um Campo obrigatório.")
 	@Column(nullable = false)
 	private String nome;
-	private Float nota;
-	private String nomeGrupo;
 	private String anotacoes;
 	private Integer quantidadeAlunosGrupo;
-	
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private String dataCriacao;
-	
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private String dataEntrega;
-	
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date dataCriacao;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date dataEntrega;
+
 	private String url;
 
 	@ManyToOne
 	@JoinColumn(name = "materia_id")
 	private Materia materia;
+	
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "atividade")
+	private List<AtividadeAluno> atividadeAluno = new ArrayList<>();
 
 	public Atividade() {
-		
+
 		quantidadeAlunosGrupo = 0;
-		
+
 	}
 
 	public Atividade(Integer id, @NotBlank(message = "O nome da atividade é um Campo obrigatório.") String nome,
-			Float nota, String nomeGrupo, String anotacoes, Integer quantidadeAlunosGrupo, String dataCriacao,
-			String dataEntrega,String url, Materia materia) {
+			String anotacoes, Integer quantidadeAlunosGrupo, Date dataCriacao, Date dataEntrega, String url,
+			Materia materia) {
+	
 		this.id = id;
 		this.nome = nome;
-		this.nota = nota;
-		this.nomeGrupo = nomeGrupo;
 		this.anotacoes = anotacoes;
 		this.quantidadeAlunosGrupo = quantidadeAlunosGrupo;
 		this.dataCriacao = dataCriacao;
@@ -61,13 +66,13 @@ public class Atividade implements Serializable {
 		this.url = url;
 		this.materia = materia;
 	}
-
-	public Integer getQuantidadeAlunosGrupo() {
-		return quantidadeAlunosGrupo;
+	
+	public List<AtividadeAluno> getAtividadeAluno() {
+		return atividadeAluno;
 	}
 
-	public void setQuantidadeAlunosGrupo(Integer quantidadeAlunosGrupo) {
-		this.quantidadeAlunosGrupo = quantidadeAlunosGrupo;
+	public void setAtividadeAluno(List<AtividadeAluno> atividadeAluno) {
+		this.atividadeAluno = atividadeAluno;
 	}
 
 	public Integer getId() {
@@ -86,22 +91,6 @@ public class Atividade implements Serializable {
 		this.nome = nome;
 	}
 
-	public Float getNota() {
-		return nota;
-	}
-
-	public void setNota(Float nota) {
-		this.nota = nota;
-	}
-
-	public String getNomeGrupo() {
-		return nomeGrupo;
-	}
-
-	public void setNomeGrupo(String nomeGrupo) {
-		this.nomeGrupo = nomeGrupo;
-	}
-
 	public String getAnotacoes() {
 		return anotacoes;
 	}
@@ -110,20 +99,36 @@ public class Atividade implements Serializable {
 		this.anotacoes = anotacoes;
 	}
 
-	public String getDataCriacao() {
+	public Integer getQuantidadeAlunosGrupo() {
+		return quantidadeAlunosGrupo;
+	}
+
+	public void setQuantidadeAlunosGrupo(Integer quantidadeAlunosGrupo) {
+		this.quantidadeAlunosGrupo = quantidadeAlunosGrupo;
+	}
+
+	public Date getDataCriacao() {
 		return dataCriacao;
 	}
 
-	public void setDataCriacao(String dataCriacao) {
+	public void setDataCriacao(Date dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
 
-	public String getDataEntrega() {
+	public Date getDataEntrega() {
 		return dataEntrega;
 	}
 
-	public void setDataEntrega(String dataEntrega) {
+	public void setDataEntrega(Date dataEntrega) {
 		this.dataEntrega = dataEntrega;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public Materia getMateria() {
@@ -132,14 +137,6 @@ public class Atividade implements Serializable {
 
 	public void setMateria(Materia materia) {
 		this.materia = materia;
-	}
-	
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 
 	@Override
@@ -150,9 +147,10 @@ public class Atividade implements Serializable {
 		result = prime * result + ((dataCriacao == null) ? 0 : dataCriacao.hashCode());
 		result = prime * result + ((dataEntrega == null) ? 0 : dataEntrega.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((materia == null) ? 0 : materia.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		result = prime * result + ((nomeGrupo == null) ? 0 : nomeGrupo.hashCode());
-		result = prime * result + ((nota == null) ? 0 : nota.hashCode());
+		result = prime * result + ((quantidadeAlunosGrupo == null) ? 0 : quantidadeAlunosGrupo.hashCode());
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
 	}
 
@@ -185,20 +183,25 @@ public class Atividade implements Serializable {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		if (materia == null) {
+			if (other.materia != null)
+				return false;
+		} else if (!materia.equals(other.materia))
+			return false;
 		if (nome == null) {
 			if (other.nome != null)
 				return false;
 		} else if (!nome.equals(other.nome))
 			return false;
-		if (nomeGrupo == null) {
-			if (other.nomeGrupo != null)
+		if (quantidadeAlunosGrupo == null) {
+			if (other.quantidadeAlunosGrupo != null)
 				return false;
-		} else if (!nomeGrupo.equals(other.nomeGrupo))
+		} else if (!quantidadeAlunosGrupo.equals(other.quantidadeAlunosGrupo))
 			return false;
-		if (nota == null) {
-			if (other.nota != null)
+		if (url == null) {
+			if (other.url != null)
 				return false;
-		} else if (!nota.equals(other.nota))
+		} else if (!url.equals(other.url))
 			return false;
 		return true;
 	}

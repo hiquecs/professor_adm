@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Edição Notas</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<header style="margin-bottom: 20px">
+		<nav class="navbar navbar-expand navbar-dark bg-dark">
+			<a class="navbar-brand" href="#">Nota Aluno</a>
+		</nav>
+	</header>
+	<div class="container">
+
+		<form th:action="@{/salvarnotaedicao}" th:object="${atividade}"
+			method="post">
+
+			<input type="hidden" th:field="*{id}">
+
+			<div class="form-group">
+				<a class="navbar-brand " aria-label="Third group">RGM:</a> <label
+					th:text=${atividade.aluno.rgm}></label>
+			</div>
+
+			<div class="form-group">
+				<a class="navbar-brand " aria-label="Third group">NOME ALUNO:</a> <label
+					th:text=${atividade.aluno.nome}></label>
+			</div>
+
+			<div class="form-group">
+				<a class="navbar-brand " aria-label="Third group">NOME
+					ATIVIDADE:</a> <label th:text=${atividade.nome}></label>
+			</div>
+
+			<div class="form-group">
+				<label for="nota">NOTA:</label> <input pattern="^(\d{1,10})((\.)\d{1,2})?$" oninvalid="setCustomValidity('Use numeros e ponto 0.0')" 
+				onchange="try{setCustomValidity('')}catch(e){}" type="text"
+					class="form-control" id="nota" th:field="*{nota}">
+			</div>
+
+			<div class="form-group">
+				<label for="anotacao">ANOTACÃO:</label> <input type="text"
+					class="form-control" id="anotacao" th:field="*{anotacao}">
+			</div><br>
+
+           <div>
+            
+                 <input type="checkbox" th:field="*{situacao}" th:value="${situacao}" />
+                 <label th:for="situacao" >Entregou Trabalho</label>
+ 
+           </div><br><br>
+
+			<button type="submit" class="btn btn-primary">SALVAR</button>
+
+			<a class="btn btn-danger"
+				th:href="@{'/voltarareaadministrativanotas/'+ ${atividade.id}}">VOLTAR</a>
+		</form>
+	</div>
+</body>
+</html>
