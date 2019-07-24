@@ -1,75 +1,80 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
     <head>
-	
-	  <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="css/bootstrap.css">
-        <link rel="stylesheet" href="css/estilo.css">
-		
-        <title></title>
+        <meta charset="utf-8"> 
+        <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/estilo2.css">
+        <title>Principal Professor</title>
     </head>
     
-    <body>
-        <div class="container">
-            <form action="" method="" align="center" accept-charset="utf-8" class="" id="form-login">
-                <label class="teste"><h3></h3></label>
-				<br><br>
-				&nbsp;&nbsp;&nbsp;&nbsp; <div class="btn-group mr-2" role="group" aria-label="First group">
-    <a class="btn btn-danger" id="txtPerfil" th:href="@{'/professor/editar/'+ ${professor.id}}" role="button">Editar Perfil</a>
-  </div>
-  <div class="btn-group mr-2" role="group" aria-label="Second group">
-    <a class="btn btn-warning" id="txtAdm"  th:href="@{'/areaadministrativa/'+ ${professor.id}}" role="button">Área Administrativas das Disciplinas</a>
-  </div>
-  <div class="btn-group" role="group" aria-label="Third group">
-    <a class="btn btn-dark" id="txtaddCurso"th:href="@{'/curso/edicao/'+ ${professor.id}}" role="button">Adicionar curso/turma</a>&nbsp;&nbsp;
-	  <!-- <a class="btn btn-primary" id="cadastrar" href="#" role="button">Administrar Grupos</a> -->
-  </div>
-   <div class="btn-group" role="group" aria-label="Third group">
-    <a class="btn btn-success" id="txtAdDisc" th:href="@{'/prepara/cadastrodisciplina/'+ ${professor.id}}" role="button">Adicionar Disciplinas</a>&nbsp;&nbsp;
-    
-  </div>
-  <div class="btn-group" role="group" aria-label="Third group">
-    <a class="btn btn-primary" id="txtAddAtividade" th:href="@{'/escolhecurso/'+ ${professor.id}}"role="button">Adicionar Atividades</a>   
-      </div>
-     </form><br><br>
-				<a class="navbar-brand " aria-label="Third group">Bem Vindo Professor: </a><br>
-				 <label th:text= ${professor.nome}></label>
-			
-  </div><br>
-  <div class="container">
-   <b>Meus Cursos Cadastrados:</b><br><br>
-   
-   	<table class="table table-hover table-bordered">
-				<thead>
-					<tr class="thead-light">
-						<th>NOME</th>
-						<th>BUSCAR ALUNOS</th>
-					</tr>
-					
-				</thead>
-				<tbody>
-					<tr th:each="c : ${professor.cursos}">
-					
-						<td th:text="${c.nome}"></td>
-											
-						<td class="text-center">
-							<a class="btn btn-dark btn-sm" role="button" th:href="@{'/professor/preparalistaaluno/'+ ${c.id}}">
-								<span>Buscar Alunos Cadastrados</span>
-							</a>
-													
-						</td>
-					</tr>
-				
-				</tbody>
-			</table>
-			</div>		
+    <body class="body">
+    		<header>
+				<nav class="navbar navbar-expand navbar-dark bg-primary">
+	        		<a class="navbar-brand" href="#">Tela principal do Professor</a>      		
+	        	</nav>
+			</header>	
+     
+	        <div class="container">
+	        
+				   <br><ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+						  <li class="nav-item px-2">
+						    	<a class="btn btn-danger" id="txtPerfil" th:href="@{'/professor/editar/'+ ${professor.id}}" role="button">Editar Perfil</a>
+						  </li>
+						  
+						   <li class="nav-item px-2">
+						   		 <a class="btn btn-warning" id="txtAdm"  th:href="@{'/areaadministrativa/'+ ${professor.id}}" role="button">Administrar das Disciplinas</a>
+						  </li>
+						  
+						  <li class="nav-item px-2">
+						   		 <a class="btn btn-dark" id="txtaddCurso"th:href="@{'/curso/edicao/'+ ${professor.id}}" role="button">Adicionar curso/turma</a>
+						  </li>
+						  
+						  <li class="nav-item px-2">
+						         <a class="btn btn-success" id="txtAdDisc" th:href="@{'/prepara/cadastrodisciplina/'+ ${professor.id}}" role="button">Adicionar Disciplinas</a>
+						  </li>
+						  
+						  <li class="nav-item px-2">
+						   		 <a class="btn btn-primary" id="txtAddAtividade" th:href="@{'/escolhecurso/'+ ${professor.id}}"role="button">Adicionar Atividades</a>
+						  </li>
+						
+                    </ul>
+                  
+			    <br><br>
+							<a class="navbar-brand text-primary" aria-label="Third group"><b>Bem Vindo Professor:</b> </a>
+							 <label th:text= ${professor.nome} class="text-danger"></label>
+						
+	  	    </div><br>
+	  	  
+		 	<div class="container">
+		  		 <b class="text-primary">Meus Cursos Cadastrados:</b><br><br>
+		   
+			   	<table class="table table-hover table-bordered">
+						<thead>
+							<tr class="thead-light">
+								<th>NOME</th>
+								<th>BUSCAR ALUNOS</th>
+							</tr>
+								
+						</thead>
+						<tbody>
+						
+							<tr th:each="c : ${professor.cursos}">
+								
+								<td th:text="${c.nome}" style="background-color: white" class="text-danger"></td>
+														
+								<td class="text-center" style="background-color: white">
+									<a class="btn btn-primary btn-sm" role="button" th:href="@{'/professor/preparalistaaluno/'+ ${c.id}}">
+										<span>Buscar Alunos Cadastrados</span>
+									</a>
+																
+									</td>
+							</tr>
+							
+						</tbody>
+				</table>
+		   </div>
+		    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+			<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>		
     </body>
 </html>
-
-<!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

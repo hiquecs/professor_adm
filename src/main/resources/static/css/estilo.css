@@ -1,6 +1,6 @@
 body{
     padding-top: 180px;
-    background-image: url(fundo.jpg);
+    background-image: url(fundo.jpg) !important;
     background-repeat: repeat-x;
     background-size: 100%;
 }

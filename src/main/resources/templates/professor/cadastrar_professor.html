@@ -3,19 +3,16 @@
 	<head>
 		<title>Professor</title>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/estilo2.css">
 	</head>
 	<body>
 		<header style="margin-bottom:20px">
-			<nav class="navbar navbar-expand navbar-dark bg-dark">
+			<nav class="navbar navbar-expand navbar-dark bg-primary">
         		<a class="navbar-brand" href="#">Formulário de Professor</a>      		
         	</nav>
 		</header>	
-		<div class="container">
+		<div class="mx-auto" style="width: 650px">
 		
 			<!-- MENSAGEM DE SUCESSO -->
 			<div th:if="${message != null}" class="alert alert-success alert-dismissible" role="alert">				
@@ -28,7 +25,7 @@
 				<button type="button" class="close" data-dismiss="alert">&times;</button>
 			</div>	
 			<div>
-			<img src="css/avatar-blank.png" data-holder-rendered="true" style="width: 140px; height: 140px;">
+			<img src="/css/avatar-blank.png" data-holder-rendered="true" style="width: 140px; height: 140px;">
 			</div>
 			<form enctype="multipart/form-data"
 				th:action="${professor.id == null} ? @{/professor/cadastro} : @{/professor/editar}" 
@@ -45,23 +42,23 @@
 				
 				<input type="hidden" th:field="*{id}">
 				
-				<div class="mdl-navigation__link" >
-					<label for="file" >FOTO</label>
+				<div class="mdl-navigation__link w-50" >
+					<label for="file" class="text-primary">FOTO</label>
 					<input type="file" class="form-control" id="file" name ="file" >
 				</div><br>
 				
 				<div class="form-group">
-					<label for="nome">NOME:</label>
+					<label for="nome" class="text-primary">NOME:</label>
 					<input type="text" class="form-control" id="nome" th:field="*{nome}">
 				</div>
 				
 				<div class="form-group">
-					<label for="email">E-MAIL:</label>
+					<label for="email" class="text-primary">E-MAIL:</label>
 					<input type="email" class="form-control" id="email" th:field="*{email}">
 				</div>
 				
 				<div class="form-group">
-					<label for="senha">SENHA:</label>
+					<label for="senha" class="text-primary">SENHA:</label>
 					<input type="text" class="form-control" id="senha" th:field="*{senha}">
 				</div>
 				
@@ -69,5 +66,7 @@
 				<a class="btn btn-danger"  th:href="@{/professor}">VOLTAR</a>
 			</form>			
 		</div>
+			<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+			<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>	
 	</body>
 </html>
