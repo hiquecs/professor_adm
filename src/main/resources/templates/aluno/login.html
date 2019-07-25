@@ -2,9 +2,9 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/estilo.css">
-        <script type="text/javascript" scr="js/bootstrap.min.js"></script>
+   
         <title>Login - Controle de atividades</title>
     </head>
     
@@ -18,7 +18,7 @@
 			</div>	
 			
             <form action= "/validacao"  method="post" accept-charset="utf-8" class="shadow-lg p-3 mb-5 bg-transparent rounded" id="form-login">
-                <label class="teste"><h3>Login Aluno</h3></label>
+                <h3>Login Aluno</h3>
                 <div class="form-group">
                     
                     <label for="login">Email:</label><br>
@@ -27,13 +27,15 @@
                     <input type="password" class="form-control" maxlength="50" id="senha" name="senha">
                     <br>
                     <button type="submit" class="btn btn-primary btn-block" id="entrar">Entrar</button><br><br>
-               
-            </form>
-                    <a type="button" class="btn btn-primary  btn-block"  href="/cadastraraluno" >Cadastre-se</a><br><br>
                     
+                    <a type="button" class="btn btn-primary  btn-block"  href="/cadastraraluno" >Cadastre-se</a><br><br>
                     <a class="btn btn-secondary btn-block" id="txtCancelar" href="/senhaemail" role="button">Esqueci minha senha</a> 
                     
+                </div>
+            </form>
+                    
         </div>
-        </div>
+         <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+		 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
     </body>
 </html>

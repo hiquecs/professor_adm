@@ -4,11 +4,11 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.devgroup.professor_adm.Repositorios.CursoRepository;
 import com.devgroup.professor_adm.Repositorios.ProfessorRepository;
@@ -25,78 +25,84 @@ public class CursoRecursos {
 	private CursoRepository cursoDao;
 
 	@GetMapping("/curso/edicao/{id}")
-	public String criarCurso(@PathVariable("id") Integer id, Curso curso, BindingResult result, RedirectAttributes attr,
-			ModelMap model) {
+	public ModelAndView criarCurso(@PathVariable("id") Integer id, Curso curso, ModelAndView view) {
 
 		Professor professor = repo.getOne(id);
 
-		model.addAttribute("professor", professor);
+		view.addObject("professor", professor);
+		view.addObject("curso", curso);
+		view.setViewName("/professor/cursocadastro");
 
-		return "/professor/cursocadastro";
+		return view;
 	}
-	
-	@GetMapping("/curso/excluir/{id}")
-	public String excluiCurso(@PathVariable("id") Integer id, RedirectAttributes attr) {
 
-           Curso curso = cursoDao.getOne(id);
-			cursoDao.deleteById(id);
-			
-		return "redirect:/listarcurso/" + curso.getProfessor().getId();
+	@GetMapping("/curso/excluir/{id}")
+	public ModelAndView excluiCurso(@PathVariable("id") Integer id, ModelAndView view) {
+
+		Curso curso = cursoDao.getOne(id);
+		cursoDao.deleteById(id);
+
+		view.setViewName("redirect:/listarcurso/" + curso.getProfessor().getId());
+
+		return view;
 	}
 
 	@GetMapping("/listarcurso/{id}")
-	public String listarCurso(@PathVariable("id") Integer id, Professor professor, BindingResult result,
-			RedirectAttributes attr, ModelMap model) {
+	public ModelAndView listarCurso(@PathVariable("id") Integer id, ModelAndView view) {
 
-		Professor prof = repo.getOne(id);
+		Professor professor = repo.getOne(id);
 
-		model.addAttribute("professor", prof);
+		view.addObject("professor", professor);
+		view.setViewName("/professor/listarcursos");
 
-		return "/professor/listarcursos";
+		return view;
 	}
-	
+
 	@GetMapping("/editar/curso/{id}")
-	public String editarCurso(@PathVariable("id") Integer id, Curso cur, BindingResult result,
-			RedirectAttributes attr, ModelMap model) {
+	public ModelAndView editarCurso(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Curso curso = cursoDao.getOne(id);
 
-		model.addAttribute("curso",curso);
+		view.addObject("curso", curso);
+		view.setViewName("/professor/cursoedicao");
 
-		return "/professor/cursoedicao";
+		return view;
 	}
 
-
-	@RequestMapping("/curso/salva")
-	public String cursoSalvar(@Valid Curso curso, BindingResult result, RedirectAttributes attr, ModelMap model)
-			throws DataIntegrityViolationException {
+	@PostMapping("/curso/salva")
+	public ModelAndView cursoSalvar(@Valid Curso curso, BindingResult result, RedirectAttributes attr,
+			ModelAndView view) throws DataIntegrityViolationException {
 
 		Professor professor = repo.getOne(curso.getId());
 
 		try {
 
 			if (result.hasErrors()) {
-				model.addAttribute("professor", professor);
-				return "/professor/cursocadastro";
+				view.addObject("professor", professor);
+				view.setViewName("/professor/cursocadastro");
+
+				return view;
 			}
 
 			curso.setId(null);
 			curso.setProfessor(professor);
 			cursoDao.save(curso);
 			attr.addFlashAttribute("message", "Curso cadastrado com sucesso!");
+			view.setViewName("redirect:/curso/edicao/" + professor.getId());
 
-			return "redirect:/curso/edicao/" + professor.getId();
+			return view;
 		} catch (DataIntegrityViolationException e) {
 			attr.addFlashAttribute("messages", "O nome do curso já existe para este professor");
+			view.setViewName("redirect:/curso/edicao/" + professor.getId());
 
-			return "redirect:/curso/edicao/" + professor.getId();
+			return view;
 		}
 	}
 
-	@RequestMapping("/curso/salvaedicao")
-	public String cursoEdita(@Valid Curso curso, BindingResult result, RedirectAttributes attr, ModelMap model)
+	@PostMapping("/curso/salvaedicao")
+	public ModelAndView cursoEdita(@Valid Curso curso, BindingResult result, RedirectAttributes attr, ModelAndView view)
 			throws DataIntegrityViolationException {
-		
+
 		Curso cur = cursoDao.getOne(curso.getId());
 
 		Professor professor = repo.getOne(cur.getProfessor().getId());
@@ -104,19 +110,24 @@ public class CursoRecursos {
 		try {
 
 			if (result.hasErrors()) {
-				model.addAttribute("curso", curso);
-			     return "/professor/cursoedicao";
+				view.addObject("curso", curso);
+				view.setViewName("/professor/cursoedicao");
+
+				return view;
 			}
 			curso.setProfessor(professor);
 			cursoDao.save(curso);
 			attr.addFlashAttribute("message", "Curso editado com sucesso!");
-			 return "redirect:/curso/edicao/" + professor.getId();
+			view.setViewName("redirect:/curso/edicao/" + professor.getId());
 
-			
+			return view;
+
 		} catch (DataIntegrityViolationException e) {
 			attr.addFlashAttribute("messages", "O nome do curso já existe para este professor");
-			model.addAttribute("curso", curso);
-			 return "/professor/cursoedicao";	
+			view.addObject("curso", curso);
+			view.setViewName("/professor/cursoedicao");
+
+			return view;
 		}
 	}
 }

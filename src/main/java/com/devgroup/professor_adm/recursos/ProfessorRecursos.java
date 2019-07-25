@@ -2,20 +2,17 @@ package com.devgroup.professor_adm.recursos;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.devgroup.professor_adm.Repositorios.AtividadeAlunoRepository;
 import com.devgroup.professor_adm.Repositorios.CursoRepository;
 import com.devgroup.professor_adm.Repositorios.MateriaRepository;
@@ -51,36 +48,42 @@ public class ProfessorRecursos {
 	private ImageService imageService;
 
 	@GetMapping("professor/editar/{id}")
-	public String preEditar(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView preEditar(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Professor professor = repo.getOne(id);
 
-		model.addAttribute("professor", professor);
-		return "/professor/editar_professor";
+		view.addObject("professor", professor);
+		view.setViewName("/professor/editar_professor");
+
+		return view;
 	}
 
 	@GetMapping("/areaadministrativa/{id}")
-	public String areaAdministrativa(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView areaAdministrativa(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Professor professor = repo.getOne(id);
 
-		model.addAttribute("professor", professor);
-		return "/professor/listarcursosadministracao";
+		view.addObject("professor", professor);
+		view.setViewName("/professor/listarcursosadministracao");
+
+		return view;
 	}
 
 	@GetMapping("/listarcursosadmin/{id}")
-	public String listarCursosAdmin(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView listarCursosAdmin(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Curso curso = cursoRepo.getOne(id);
 		Professor professor = repo.getOne(curso.getProfessor().getId());
 
-		model.addAttribute("professor", professor);
-		model.addAttribute("curso", curso);
-		return "/professor/listarmateriasadministracao";
+		view.addObject("professor", professor);
+		view.addObject("curso", curso);
+		view.setViewName("/professor/listarmateriasadministracao");
+
+		return view;
 	}
 
 	@GetMapping("/editar/notasMateria/{id}")
-	public String editarNotas(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView editarNotas(@PathVariable("id") Integer id, ModelAndView view) {
 
 		AtividadeAluno atividadeAluno = atiAlunoRepo.getOne(id);
 
@@ -91,33 +94,33 @@ public class ProfessorRecursos {
 			atividadeAluno.setAluno(alu);
 		}
 
-		model.addAttribute("atividade", atividadeAluno);
+		view.addObject("atividade", atividadeAluno);
+		view.setViewName("/professor/editarnotaatividades");
 
-		return "/professor/editarnotaatividades";
+		return view;
 	}
 
 	@GetMapping("/editar/notasMateriagrupo/{id}")
-	public String editarNotasGrupo(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView editarNotasGrupo(@PathVariable("id") Integer id, ModelAndView view) {
 
 		AtividadeAluno atividadeAluno = atiAlunoRepo.getOne(id);
-		
-		
 
-			if (atividadeAluno.getAlunoProfessor() != null) {
+		if (atividadeAluno.getAlunoProfessor() != null) {
 
-				Aluno alu = new Aluno(null, atividadeAluno.getAlunoProfessor().getNome(), null, null, atividadeAluno.getAlunoProfessor().getRgm(),
-						null, null);
-				atividadeAluno.setAluno(alu);
-			}
-		
-		model.addAttribute("atividade", atividadeAluno);
+			Aluno alu = new Aluno(null, atividadeAluno.getAlunoProfessor().getNome(), null, null,
+					atividadeAluno.getAlunoProfessor().getRgm(), null, null);
+			atividadeAluno.setAluno(alu);
+		}
 
-		return "/professor/editarnotaatividadesgrupo";
+		view.addObject("atividade", atividadeAluno);
+		view.setViewName("/professor/editarnotaatividadesgrupo");
+
+		return view;
 	}
 
-	@RequestMapping("/salvarnotaedicao")
-	public String salvarNotas(@Valid AtividadeAluno atividadeAluno) {
-	
+	@PostMapping("/salvarnotaedicao")
+	public ModelAndView salvarNotas(@Valid AtividadeAluno atividadeAluno, ModelAndView view) {
+
 		AtividadeAluno ati = atiAlunoRepo.getOne(atividadeAluno.getId());
 
 		ati.setNota(atividadeAluno.getNota());
@@ -125,18 +128,19 @@ public class ProfessorRecursos {
 		ati.setSituacao(atividadeAluno.getSituacao());
 
 		atiAlunoRepo.save(ati);
+		view.setViewName("redirect:/areaadministrativanotas/" + ati.getMateria().getId());
 
-		return "redirect:/areaadministrativanotas/" + ati.getMateria().getId();
+		return view;
 	}
 
-	@RequestMapping("/salvarnotaedicaogrupo")
-	public String salvarNotasGrupo(@Valid AtividadeAluno atividadeAluno) {
-	
+	@PostMapping("/salvarnotaedicaogrupo")
+	public ModelAndView salvarNotasGrupo(@Valid AtividadeAluno atividadeAluno, ModelAndView view) {
+
 		AtividadeAluno ati = atiAlunoRepo.getOne(atividadeAluno.getId());
 
 		List<AtividadeAluno> listAlunos = atiAlunoRepo.findAtividadePorNomeGrupo(ati.getAtividade().getId(),
 				ati.getGrupo());
-		
+
 		for (AtividadeAluno c : listAlunos) {
 			c.setNota(atividadeAluno.getNota());
 			c.setAnotacao(atividadeAluno.getAnotacao());
@@ -145,32 +149,34 @@ public class ProfessorRecursos {
 		Atividade atividade = ati.getAtividade();
 
 		atiAlunoRepo.saveAll(listAlunos);
-		
-		if(ati.getGrupo()==null){
+
+		if (ati.getGrupo() == null) {
 			ati.setNota(atividadeAluno.getNota());
 			ati.setAnotacao(atividadeAluno.getAnotacao());
 			ati.setSituacao(atividadeAluno.getSituacao());
 			atiAlunoRepo.save(ati);
 		}
+		view.setViewName("redirect:/listarporgrupos/" + atividade.getId());
 
-		return "redirect:/listarporgrupos/" + atividade.getId();
+		return view;
 	}
 
 	@GetMapping("/voltarareaadministrativanotas/{id}")
-	public String voltar(@PathVariable("id") Integer id) {
+	public ModelAndView voltar(@PathVariable("id") Integer id, ModelAndView view) {
 
 		AtividadeAluno ati = atiAlunoRepo.getOne(id);
+		view.setViewName("redirect:/areaadministrativanotas/" + ati.getMateria().getId());
 
-		return "redirect:/areaadministrativanotas/" + ati.getMateria().getId();
+		return view;
 	}
 
 	@GetMapping("/areaadministrativanotas/{id}")
-	public String areaAdministrativaNotas(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView areaAdministrativaNotas(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Materia materia = materiaRepo.getOne(id);
 		Professor professor = repo.getOne(materia.getCurso().getProfessor().getId());
 
-		List<AtividadeAluno> atividades =  atiAlunoRepo.findAtividades(materia.getId());
+		List<AtividadeAluno> atividades = atiAlunoRepo.findAtividades(materia.getId());
 		List<Aluno> aluno = materia.getAlunos();
 
 		for (AtividadeAluno c : atividades) {
@@ -183,16 +189,17 @@ public class ProfessorRecursos {
 			}
 		}
 
-		model.addAttribute("quantidade", aluno.size());
-		model.addAttribute("materia", materia);
-		model.addAttribute("atividade", atividades);
-		model.addAttribute("professor", professor);
+		view.addObject("quantidade", aluno.size());
+		view.addObject("materia", materia);
+		view.addObject("atividade", atividades);
+		view.addObject("professor", professor);
+		view.setViewName("/professor/listaadministranotas");
 
-		return "/professor/listaadministranotas";
+		return view;
 	}
 
 	@GetMapping("/liberanota/{id}")
-	public String liberaNota(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView liberaNota(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Materia materia = materiaRepo.getOne(id);
 		Boolean a = materia.getLiberarNota();
@@ -203,29 +210,34 @@ public class ProfessorRecursos {
 			materia.setLiberarNota(true);
 			materiaRepo.save(materia);
 		}
-		return "redirect:/areaadministrativanotas/" + materia.getId();
+		view.setViewName("redirect:/areaadministrativanotas/" + materia.getId());
+		return view;
 	}
 
 	@GetMapping("/professor/preparalistaaluno/{id}")
-	public String preparaListaAluno(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView preparaListaAluno(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Curso curso = cursoRepo.getOne(id);
 
-		model.addAttribute("curso", curso);
-		return "/professor/listarmateriasalunos";
+		view.addObject("curso", curso);
+		view.setViewName("/professor/listarmateriasalunos");
+
+		return view;
 	}
 
-	@RequestMapping("/professor/salvaredicao")
-	public String editarProfessor(@Valid Professor professor, BindingResult result, RedirectAttributes attr,
-			ModelMap model) {
+	@PostMapping("/professor/salvaredicao")
+	public ModelAndView editarProfessor(@Valid Professor professor, BindingResult result, RedirectAttributes attr,
+			ModelAndView view) {
 
 		try {
 
 			if (result.hasErrors()) {
 
 				attr.addFlashAttribute("messages", "Emails já cadastrados no sistema não são permitidos");
-				model.addAttribute("professor", professor);
-				return "/professor/editar_professor";
+				view.addObject("professor", professor);
+				view.setViewName("/professor/editar_professor");
+
+				return view;
 			}
 
 			Professor pro = repo.getOne(professor.getId());
@@ -235,30 +247,34 @@ public class ProfessorRecursos {
 			repo.save(pro);
 			attr.addFlashAttribute("message", "Professor atualizado com sucesso!");
 
-			model.addAttribute("professor", pro);
+			view.addObject("professor", pro);
+			view.setViewName("/professor/professor_principal");
 
-			return "/professor/professor_principal";
+			return view;
 
 		} catch (Exception e) {
 			attr.addFlashAttribute("messages", "Emails já cadastrados no sistema não são permitidos");
-			model.addAttribute("professor", professor);
-			return "/professor/editar_professor";
+			view.addObject("professor", professor);
+			view.setViewName("/professor/editar_professor");
+
+			return view;
 		}
 	}
 
 	@GetMapping("professor/principal/{id}")
-	public String telaPrincipal(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView telaPrincipal(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Professor professor = repo.getOne(id);
 
-		model.addAttribute("professor", professor);
+		view.addObject("professor", professor);
+		view.setViewName("/professor/professor_principal");
 
-		return "/professor/professor_principal";
+		return view;
 	}
 
-	@RequestMapping("/professor/editarfoto")
-	public String editarFoto(@RequestParam("file") MultipartFile file, @Valid Professor professor,
-			RedirectAttributes attr, ModelMap model) {
+	@PostMapping("/professor/editarfoto")
+	public ModelAndView editarFoto(@RequestParam("file") MultipartFile file, @Valid Professor professor,
+			RedirectAttributes attr, ModelAndView view) {
 
 		Professor pro = repo.getOne(professor.getId());
 		try {
@@ -270,27 +286,32 @@ public class ProfessorRecursos {
 			pro.setUrl(a);
 			repo.save(pro);
 			attr.addFlashAttribute("message", "Foto alterada com sucesso!");
-			model.addAttribute("professor", pro);
-			return "/professor/editar_professor";
+			view.addObject("professor", pro);
+			view.setViewName("/professor/editar_professor");
+
+			return view;
 		} catch (Exception e) {
 			attr.addFlashAttribute("messages", "Erro. foto nao alterada!");
-			model.addAttribute("professor", pro);
-			return "/professor/editar_professor";
+			view.addObject("professor", pro);
+			view.setViewName("/professor/editar_professor");
+
+			return view;
 		}
 
 	}
 
 	@GetMapping("/trazeralunomateria/{id}")
-	public String trazerAlunosMateria(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView trazerAlunosMateria(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Materia materia = materiaRepo.getOne(id);
 		Professor professor = repo.getOne(materia.getCurso().getProfessor().getId());
 
 		List<Aluno> alunos = materia.getAlunos();
 
-		model.addAttribute("alunos", alunos);
-		model.addAttribute("professor", professor);
+		view.addObject("alunos", alunos);
+		view.addObject("professor", professor);
+		view.setViewName("/professor/listaralunos");
 
-		return "/professor/listaralunos";
+		return view;
 	}
 }

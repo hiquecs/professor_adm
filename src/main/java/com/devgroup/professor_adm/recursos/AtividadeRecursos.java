@@ -3,19 +3,17 @@ package com.devgroup.professor_adm.recursos;
 import java.util.List;
 
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.devgroup.professor_adm.Repositorios.AlunoRepository;
 import com.devgroup.professor_adm.Repositorios.AtividadeAlunoRepository;
 import com.devgroup.professor_adm.Repositorios.AtividadeRepository;
@@ -56,70 +54,71 @@ public class AtividadeRecursos {
 	private S3Service salva;
 
 	@GetMapping("/escolhecurso/{id}")
-	public String selecionaCurso(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView selecionaCurso(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Professor professor = repo.getOne(id);
 
-		model.addAttribute("professor", professor);
+		view.addObject("professor", professor);
+		view.setViewName("/professor/listarcursosatividades");
 
-		return "/professor/listarcursosatividades";
+		return view;
 	}
 
 	@GetMapping("/escolhemateria/{id}")
-	public String selecionaMateria(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView selecionaMateria(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Curso curso = cursoRepo.getOne(id);
 
 		Professor professor = repo.getOne(curso.getProfessor().getId());
 
-		model.addAttribute("professor", professor);
-		model.addAttribute("curso", curso);
+		view.addObject("professor", professor);
+		view.addObject("curso", curso);
+		view.setViewName("/professor/listarmateriasatividades");
 
-		return "/professor/listarmateriasatividades";
+		return view;
 	}
 
 	@GetMapping("/informacaoatividade/{iddisc}/{idalu}")
-	public String mostrarNotas(@PathVariable("iddisc") Integer id, @PathVariable("idalu") Integer materiaId,
-			ModelMap model) {
+	public ModelAndView mostrarNotas(@PathVariable("iddisc") Integer id, @PathVariable("idalu") Integer materiaId,
+			ModelAndView view) {
 
 		AtividadeAluno atividade = alunoRepo.getOne(id);
 		Materia materia = materiaRepo.getOne(materiaId);
 		Aluno aluno = repoAluno.getOne(atividade.getAluno().getId());
 		Atividade ati = atividade.getAtividade();
-		
-		@SuppressWarnings("deprecation")
-		String a = (ati.getDataCriacao().toLocaleString());
-		
-		@SuppressWarnings("deprecation")
-		String b = (ati.getDataEntrega().toLocaleString());
-		
-		a = a.substring(0,11);		
-		b = b.substring(0,11);
-		
 
-		model.addAttribute("aluno", aluno);
-		model.addAttribute("materia", materia);
-		model.addAttribute("atividade", ati);
-		model.addAttribute("b",b);
-		model.addAttribute("a",a);
+		String a = (ati.getDataCriacao().toString());
 
-		return "/aluno/informacoes";
+		String b = (ati.getDataEntrega().toString());
+
+		a = a.substring(0, 11);
+		b = b.substring(0, 11);
+
+		view.addObject("aluno", aluno);
+		view.addObject("materia", materia);
+		view.addObject("atividade", ati);
+		view.addObject("b", b);
+		view.addObject("a", a);
+		view.setViewName("/aluno/informacoes");
+
+		return view;
 	}
 
 	@GetMapping("/listaratividades/{id}")
-	public String selecionaAtividades(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView selecionaAtividades(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Materia materia = materiaRepo.getOne(id);
 		Professor professor = repo.getOne(materia.getCurso().getProfessor().getId());
 
-		model.addAttribute("professor", professor);
-		model.addAttribute("materia", materia);
+		view.addObject("professor", professor);
+		view.addObject("materia", materia);
+		view.setViewName("/professor/listaratividades");
 
-		return "/professor/listaratividades";
+		return view;
 	}
 
 	@GetMapping("/listarporgrupos/{id}")
-	public String listarPorGrupos(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView listarPorGrupos(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Atividade atividade = atividadeRepo.getOne(id);
 
@@ -139,55 +138,60 @@ public class AtividadeRecursos {
 			}
 		}
 
-		model.addAttribute("alunos", alunos);
-		model.addAttribute("professor", professor);
-		model.addAttribute("materia", materia);
+		view.addObject("alunos", alunos);
+		view.addObject("professor", professor);
+		view.addObject("materia", materia);
+		view.setViewName("/professor/administranotasporgrupo");
 
-		return "/professor/administranotasporgrupo";
+		return view;
 	}
 
 	@GetMapping("/listarasatividadesgrupo/{id}")
-	public String listarAsAtividades(@PathVariable("id") Integer id, ModelMap model) {
+	public ModelAndView listarAsAtividades(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Materia materia = materiaRepo.getOne(id);
 
 		List<Atividade> atividades = atividadeRepo.findAtividadeComGrupo(materia.getId());
-		model.addAttribute("atividades", atividades);
-		model.addAttribute("materia", materia);
+		view.addObject("atividades", atividades);
+		view.addObject("materia", materia);
+		view.setViewName("/professor/listaratividadesgrupo");
 
-		return "/professor/listaratividadesgrupo";
+		return view;
 	}
 
 	@GetMapping("/editar/atividade/{id}")
-	public String selecionaAtividade(@PathVariable("id") Integer id, RedirectAttributes attr, ModelMap model) {
+	public ModelAndView selecionaAtividade(@PathVariable("id") Integer id, ModelAndView view) {
 
 		Atividade atividade = atividadeRepo.getOne(id);
 		Materia materia = materiaRepo.getOne(atividade.getMateria().getId());
 		Curso curso = cursoRepo.getOne(materia.getCurso().getId());
 		Professor professor = repo.getOne(curso.getProfessor().getId());
 
-		model.addAttribute("professor", professor);
-		model.addAttribute("atividade", atividade);
+		view.addObject("professor", professor);
+		view.addObject("atividade", atividade);
+		view.setViewName("/professor/atividadeedicao");
 
-		return "/professor/atividadeedicao";
+		return view;
 	}
 
 	@GetMapping("/preparacadastroatividade/{id}")
-	public String preparaCadastroAtividade(@PathVariable("id") Integer id, Atividade atividade, ModelMap model) {
+	public ModelAndView preparaCadastroAtividade(@PathVariable("id") Integer id, Atividade atividade,
+			ModelAndView view) {
 
 		Materia materia = materiaRepo.getOne(id);
 		Professor professor = repo.getOne(materia.getCurso().getProfessor().getId());
 
-		model.addAttribute("materia", materia);
-		model.addAttribute("professor", professor);
-		model.addAttribute("atividade", atividade);
+		view.addObject("materia", materia);
+		view.addObject("professor", professor);
+		view.addObject("atividade", atividade);
+		view.setViewName("/professor/atividadecadastro");
 
-		return "/professor/atividadecadastro";
+		return view;
 	}
 
-	@RequestMapping("/atividade/salvaredicao")
-	public String atividadeSalvarEdicao(@Valid Atividade atividade, BindingResult result, RedirectAttributes attr,
-			ModelMap model) {
+	@PostMapping("/atividade/salvaredicao")
+	public ModelAndView atividadeSalvarEdicao(@Valid Atividade atividade, BindingResult result, RedirectAttributes attr,
+			ModelAndView view) {
 
 		Atividade ati = atividadeRepo.getOne(atividade.getId());
 		Materia materia = materiaRepo.getOne(ati.getMateria().getId());
@@ -196,58 +200,63 @@ public class AtividadeRecursos {
 
 		if (result.hasErrors()) {
 
-			model.addAttribute("professor", professor);
-			model.addAttribute("atividade", ati);
+			view.addObject("professor", professor);
+			view.addObject("atividade", ati);
+			view.setViewName("/professor/atividadeedicao");
 
-			return "/professor/atividadeedicao";
+			return view;
 		}
 
 		if (atividade.getDataCriacao() == null || atividade.getDataEntrega() == null) {
 
-			model.addAttribute("materia", materia);
-			model.addAttribute("professor", professor);
-			model.addAttribute("atividade", atividade);
+			view.addObject("materia", materia);
+			view.addObject("professor", professor);
+			view.addObject("atividade", atividade);
+			view.setViewName("redirect:/editar/atividade/" + atividade.getId());
 
 			attr.addFlashAttribute("messages", "Os Campos Datas são obrigatorios");
 
-			return "redirect:/editar/atividade/" + atividade.getId();
+			return view;
 		}
 
 		if (atividade.getQuantidadeAlunosGrupo() > materia.getQuantidadeAlunos()) {
 
-			model.addAttribute("materia", materia);
-			model.addAttribute("professor", professor);
-			model.addAttribute("atividade", atividade);
+			view.addObject("materia", materia);
+			view.addObject("professor", professor);
+			view.addObject("atividade", atividade);
+			view.setViewName("redirect:/editar/atividade/" + atividade.getId());
 
 			attr.addFlashAttribute("messages",
 					"Impossivel criar grupos maiores que a quantidade de alunos da Disciplina");
 
-			return "redirect:/editar/atividade/" + atividade.getId();
+			return view;
 		}
 
 		if (atividade.getDataCriacao().after(atividade.getDataEntrega())) {
 
-			model.addAttribute("materia", materia);
-			model.addAttribute("professor", professor);
-			model.addAttribute("atividade", atividade);
+			view.addObject("materia", materia);
+			view.addObject("professor", professor);
+			view.addObject("atividade", atividade);
+			view.setViewName("\"redirect:/editar/atividade/\" + atividade.getId()");
 
 			attr.addFlashAttribute("messages", "Data de criação deve ser anterior a data de entrega");
 
-			return "redirect:/editar/atividade/" + atividade.getId();
+			return view;
 		}
 
 		atividade.setUrl(ati.getUrl());
 		atividade.setMateria(materia);
 		atividadeRepo.save(atividade);
+		view.setViewName("redirect:/listaratividades/" + materia.getId());
 
 		attr.addFlashAttribute("message", "Atividade atualizada com sucesso!");
 
-		return "redirect:/listaratividades/" + materia.getId();
+		return view;
 	}
 
-	@RequestMapping("/atividade/salvar")
-	public String atividadeSalvar(@RequestParam("file") MultipartFile file, @Valid Atividade atividade,
-			BindingResult result, RedirectAttributes attr, ModelMap model) throws DataIntegrityViolationException {
+	@PostMapping("/atividade/salvar")
+	public ModelAndView atividadeSalvar(@RequestParam("file") MultipartFile file, @Valid Atividade atividade,
+			BindingResult result, RedirectAttributes attr, ModelAndView view) throws DataIntegrityViolationException {
 
 		Materia materia = materiaRepo.getOne(atividade.getId());
 		Curso curso = cursoRepo.getOne(materia.getCurso().getId());
@@ -255,43 +264,48 @@ public class AtividadeRecursos {
 
 		if (result.hasErrors()) {
 
-			model.addAttribute("materia", materia);
-			model.addAttribute("professor", professor);
-			model.addAttribute("atividade", atividade);
-			return "/professor/atividadecadastro";
+			view.addObject("materia", materia);
+			view.addObject("professor", professor);
+			view.addObject("atividade", atividade);
+			view.setViewName("/professor/atividadecadastro");
+
+			return view;
 		}
 		if (atividade.getDataCriacao() == null || atividade.getDataEntrega() == null) {
 
-			model.addAttribute("materia", materia);
-			model.addAttribute("professor", professor);
-			model.addAttribute("atividade", atividade);
+			view.addObject("materia", materia);
+			view.addObject("professor", professor);
+			view.addObject("atividade", atividade);
+			view.setViewName("redirect:/preparacadastroatividade/" + materia.getId());
 
 			attr.addFlashAttribute("messages", "Os Campos Datas são obrigatorios");
 
-			return "redirect:/preparacadastroatividade/" + materia.getId();
+			return view;
 		}
 
 		if (atividade.getQuantidadeAlunosGrupo() > materia.getQuantidadeAlunos()) {
 
-			model.addAttribute("materia", materia);
-			model.addAttribute("professor", professor);
-			model.addAttribute("atividade", atividade);
+			view.addObject("materia", materia);
+			view.addObject("professor", professor);
+			view.addObject("atividade", atividade);
+			view.setViewName("redirect:/preparacadastroatividade/" + materia.getId());
 
 			attr.addFlashAttribute("messages",
 					"Impossivel criar grupos maiores que a quantidade de alunos da Disciplina");
 
-			return "redirect:/preparacadastroatividade/" + materia.getId();
+			return view;
 		}
 
 		if (atividade.getDataCriacao().after(atividade.getDataEntrega())) {
 
-			model.addAttribute("materia", materia);
-			model.addAttribute("professor", professor);
-			model.addAttribute("atividade", atividade);
+			view.addObject("materia", materia);
+			view.addObject("professor", professor);
+			view.addObject("atividade", atividade);
+			view.setViewName("redirect:/preparacadastroatividade/" + materia.getId());
 
 			attr.addFlashAttribute("messages", "Data de criação deve ser anterior a data de entrega");
 
-			return "redirect:/preparacadastroatividade/" + materia.getId();
+			return view;
 		}
 
 		String a;
@@ -331,23 +345,26 @@ public class AtividadeRecursos {
 		}
 
 		attr.addFlashAttribute("message", "Atividade cadastrado com sucesso!");
-		return "redirect:/preparacadastroatividade/" + materia.getId();
+		view.setViewName("redirect:/preparacadastroatividade/" + materia.getId());
+
+		return view;
 	}
 
 	@GetMapping("/atividade/excluir/{id}")
-	public String excluiCurso(@PathVariable("id") Integer id, RedirectAttributes attr) {
+	public ModelAndView excluiCurso(@PathVariable("id") Integer id, RedirectAttributes attr, ModelAndView view) {
 
 		Atividade atividade = atividadeRepo.getOne(id);
 		Materia materia = materiaRepo.getOne(atividade.getMateria().getId());
 		atividadeRepo.deleteById(id);
 		attr.addFlashAttribute("message", "Atividade excluida com sucesso!");
+		view.setViewName("redirect:/listaratividades/" + materia.getId());
 
-		return "redirect:/listaratividades/" + materia.getId();
+		return view;
 	}
 
-	@RequestMapping("/atividade/editararquivo")
-	public String editarArquivo(@RequestParam("file") MultipartFile file, @Valid Atividade atividade,
-			RedirectAttributes attr, ModelMap model) {
+	@PostMapping("/atividade/editararquivo")
+	public ModelAndView editarArquivo(@RequestParam("file") MultipartFile file, @Valid Atividade atividade,
+			RedirectAttributes attr, ModelAndView view) {
 
 		Atividade ati = atividadeRepo.getOne(atividade.getId());
 
@@ -364,11 +381,13 @@ public class AtividadeRecursos {
 				atividadeRepo.save(ati);
 				attr.addFlashAttribute("message", "Atividade alterada com sucesso!");
 			}
-			return "redirect:/editar/atividade/" + ati.getId();
+			view.setViewName("redirect:/editar/atividade/" + ati.getId());
+			return view;
 		} catch (Exception e) {
 			attr.addFlashAttribute("messages", "Erro. atividade nao alterada!");
+			view.setViewName("redirect:/editar/atividade/" + ati.getId());
 
-			return "redirect:/editar/atividade/" + ati.getId();
+			return view;
 		}
 	}
 }
